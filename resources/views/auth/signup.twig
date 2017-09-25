@@ -1,0 +1,21 @@
+{% extends 'templates/app.twig' %}
+
+{% block content %}
+	<h1>Signup</h1>
+	<form action="{{ path_for('auth.signup') }}" method="post">
+		{% if errors.name %}
+			<span class="error">{{ errors.name | first }}</span>
+		{% endif %}
+		<input type="text" name="name" placeholder="Name" value="{{ old.name }}">
+		{% if errors.email %}
+			<span class="error">{{ errors.email | first }}</span>
+		{% endif %}
+		<input type="email" name="email" placeholder="Email" value="{{ old.email }}">
+		{% if errors.password %}
+			<span class="error">{{ errors.password | first }}</span>
+		{% endif %}
+		<input type="password" name="password" placeholder="Password">
+		{{ csrf.field | raw }}
+		<input type="submit">
+	</form>
+{% endblock %}

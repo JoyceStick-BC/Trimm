@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="{{ base_url() }}/css/style.css">
+	</head>
+	<body>
+		{% include 'templates/partials/navigation.twig' %}
+		{% include 'templates/partials/flash.twig' %}
+		{% block content %}{% endblock %}
+	</body>
+</html>

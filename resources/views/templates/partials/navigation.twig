@@ -1,0 +1,11 @@
+<div id="nav">
+	<a href="#">Home</a>
+	{% if auth.check %}
+	Hi {{ auth.user.name }}
+	<a href="#">Dashboard</a>
+	<a href="{{ path_for('auth.signout') }}">Sign out</a>
+	{% else %}
+	<a href="{{ path_for('auth.signin') }}">Sign in</a>
+	<a href="{{ path_for('auth.signup') }}">Sign up</a>
+	{% endif %}
+</div>

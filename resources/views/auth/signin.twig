@@ -1,0 +1,17 @@
+{% extends 'templates/app.twig' %}
+
+{% block content %}
+	<h1>Sign In</h1>
+	<form action="{{ path_for('auth.signin') }}" method="post">
+		{% if errors.email %}
+			<span class="error">{{ errors.email | first }}</span>
+		{% endif %}
+		<input type="email" name="email" placeholder="Email" value="{{ old.email }}">
+		{% if errors.password %}
+			<span class="error">{{ errors.password | first }}</span>
+		{% endif %}
+		<input type="password" name="password" placeholder="Password">
+		{{ csrf.field | raw }}
+		<input type="submit">
+	</form>
+{% endblock %}
