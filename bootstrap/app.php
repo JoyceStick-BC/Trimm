@@ -15,10 +15,10 @@ $app = new \Slim\App([
 	    'addContentLengthHeader' => false,
 		'db' => [
 			'driver' => 'mysql',
-			'host' => '127.0.0.1:51493',
-			'database' => 'carbon',
-			'username' => 'azure',
-			'password' => '6#vWHD_$',
+			'host' => 'localhost',
+			'database' => 'snatch',
+			'username' => 'root',
+			'password' => '',
 			'collation' => 'latin1_swedish_ci',
 			'prefix' => ''
 		]
@@ -80,6 +80,10 @@ $container['AuthController'] = function($container) {
 
 $container['PasswordController'] = function ($container) {
     return new \Carbon\Controllers\Auth\PasswordController($container);
+};
+
+$container['BundleController'] = function ($container) {
+    return new \Carbon\Controllers\BundleController($container);
 };
 
 $container['csrf'] = function($container) {
