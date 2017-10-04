@@ -8,6 +8,9 @@ ini_set('display_errors', 1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
+$dotenv = new Dotenv\Dotenv(__DIR__);
+$dotenv->load();
+
 $app = new \Slim\App([
 	'settings' => [
 		'displayErrorDetails' => true,
@@ -15,10 +18,10 @@ $app = new \Slim\App([
 	    'addContentLengthHeader' => false,
 		'db' => [
 			'driver' => 'mysql',
-			'host' => 'localhost',
-			'database' => 'snatch',
-			'username' => 'root',
-			'password' => '',
+			'host' => getenv('DB_HOST'),
+			'database' => getenv('DB_NAME'),
+			'username' => getenv('DB_USER'),
+			'password' => getenv('DB_PASS'),
 			'collation' => 'latin1_swedish_ci',
 			'prefix' => ''
 		]
