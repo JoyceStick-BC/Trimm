@@ -1,5 +1,31 @@
 {% extends 'templates/app.twig' %}
-
+{% block id %}id="home"{% endblock %}
 {% block content %}
-	Home
+	<div id="container">
+		<div class="iB left" id="market">
+			<div id="title">Finally, an asset manager<br>that doesn't suck.</div>
+			<div id="subtitle">Snatch makes it easy to keep sound and 3D-model assets organized in your project.</div>
+            <div id="butt">
+                <div class="left iB">
+                    <button>Upload Assets</button>
+                </div>
+                <div class="left iB">
+                    <button class="browse">Browse the Library</button>
+                </div>
+            </div>
+		</div>
+		<div class="iB right" id="installation">
+			<div id="installCode">
+                <span>//Installation is easy</span><br><br>
+                curl -O "http://snatch-it.org/releases/snatch.py"<br>
+                pip install click<br>
+                pip install requests<br>
+                pip install tqdm
+                <div id="documentation">
+                    <a href=""><button>How do I use Snatch?</button></a>
+                </div>
+			</div>
+		</div>
+	</div>
+    <script src="{{ base_url() }}/js/homeHero.js"></script>
 {% endblock %}
