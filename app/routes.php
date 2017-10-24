@@ -25,4 +25,6 @@ $app->group('', function () {
     $this->post('/auth/password/change', 'PasswordController:postChangePassword');
 })->add(new AuthMiddleware($container));
 
-$app->get('/{username}/{bundlename}', 'BundleController:downloadBundle')->setName('bundle.download');
+$app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');
+
+$app->get('/latest/{username}/{bundlename}', 'BundleController:getLatestVersion')->setName('bundle.latestVersion');
