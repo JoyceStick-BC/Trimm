@@ -6,31 +6,37 @@ use Carbon\Models\Bundle;
 
 class BundleController extends Controller {
     public function downloadBundle($request, $response, $args) {
-        if(isset($args["version"])) {
-            //version is provided
-        } else {
-            //download latest version
-        }
-
         $username = $args["username"];
         $bundlename = $args["bundlename"];
 
-        $bundle = Bundle::where('user', $username)->where('bundleName', $bundlename)->first();
+        if(isset($args["version"])) {
+            //version is provided
+            $version = $args["version"];
+            $bundle = Bundle::where('user', $username)->where('bundleName', $bundlename)->where('version', $version)->first();
+        } else {
+            //download latest version
+            $bundle = Bundle::where('user', $username)->where('bundleName', $bundlename)->orderBy('created_at', 'desc')->first();
+        }
 
         if(!$bundle) {
             //the bundle doesn't exist
-            $error = array(
-                "success" => "false",
-                "message" => "Could not find a bundle with that username and bundle name"
-            );
-
-            echo json_encode($error);
-            exit();
+            if(isset($args["version"])) {
+                $error = array(
+                    "success" => "false",
+                    "message" => "Could not find an asset with that username, bundle name, and version"
+                );
+            } else {
+                $error = array(
+                    "success" => "false",
+                    "message" => "Could not find an asset with that username and bundle name"
+                );
+            }
         } else {
                 //A bundle was found. grab the hash and stream the download.
                 $file = 'localhost/snatch/public/img.zip';
                 $zip = $bundle->hash . ".zip";
                 $path = $request->getUri()->getBasePath() . "/bundles/{$zip}";
+                echo $path;
                 return $response->withRedirect($path);
         }
     }
