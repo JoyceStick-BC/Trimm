@@ -26,3 +26,5 @@ $app->group('', function () {
 })->add(new AuthMiddleware($container));
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');
+
+$app->get('/latest/{username}/{bundlename}', 'BundleController:getLatestVersion')->setName('bundle.latestVersion');
