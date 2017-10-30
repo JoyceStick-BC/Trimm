@@ -1,16 +1,26 @@
 <div id="nav">
-	<div class="left"><a href="#"><img src="{{ base_url() }}/img/platform/logo.png" height="15px"></a></div>
-	<div class="right">
-		<a href="#">Documentation</a>
-		<a href="#">Browse Packages</a>
-		<!--
-		{% if auth.check %}
-			<a href="#">Profile</a>
-			<a href="{{ path_for('auth.signout') }}">Sign out</a>
-		{% else %}
-			<a href="{{ path_for('auth.signin') }}">Sign in</a>
-			<a href="{{ path_for('auth.signup') }}">Sign up</a>
-		{% endif %} -->
+	<div id="navContainer">
+		<div class="left">
+			<ul>
+				<li><a href="#">Docs</a></li>
+				<li><a href="#">Browse</a></li>
+				<li><a href="#">Upload</a></li>
+			</ul>
+		</div>
+		<div id="logo">
+			<a href="#"><img src="{{ base_url() }}/img/platform/logo.png" height="15px"></a>
+		</div>
+		<div class="right">
+			<ul>
+			{% if auth.check %}
+				<li><a href="#">Profile</a></li>
+				<li><a href="{{ path_for('auth.signout') }}">Sign out</a></li>
+			{% else %}
+				<li><a href="{{ path_for('auth.signin') }}">Sign in</a></li>
+				<li><a href="{{ path_for('auth.signup') }}">Get Started</a></li>
+			{% endif %}
+			</ul>
+		</div>
 	</div>
 	<div class="clear"></div>
 </div>
