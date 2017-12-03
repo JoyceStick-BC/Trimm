@@ -1,31 +1,32 @@
 {% extends 'templates/app.twig' %}
 {% block id %}id="home"{% endblock %}
 {% block content %}
-	<div id="container">
-		<div class="iB left" id="market">
-			<div id="title">Finally, an asset manager<br>that doesn't suck.</div>
-			<div id="subtitle">Snatch makes it easy to keep sound and 3D-model assets organized in your project.</div>
-            <div id="butt">
-                <div class="left iB">
-                    <button>Upload Assets</button>
-                </div>
-                <div class="left iB">
-                    <button class="browse">Browse the Library</button>
+    <div class="hero">
+        <div class="container w-container">
+            <div class="hero-content">
+                <div class="w-row">
+                    <div class="w-col w-col-7">
+                        <h1 class="heading">Finally, an asset manager that doesn&#x27;t suck.</h1>
+                        <p class="paragraph">Trimm makes it easy to keep sound and 3D-model assets organized in your project.</p>
+                        <div class="div-block-3 w-clearfix">
+                            <div class="action-button purple-button">
+                                <div>Upload Assets</div>
+                            </div>
+                            <div class="action-button">
+                                <div>Browse the Library</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column w-col w-col-5">
+                        <div class="hero-install-instructions">
+                            <div class="hero-install-instructions-code">
+                                <div class="text-block"><span class="text-span">//Installation is easy<br xmlns="http://www.w3.org/1999/xhtml"></span>curl -O &quot;http://trimm3d.com/d&quot;<br>pip install click<br>pip install requests<br>pip install tqdm</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-		</div>
-		<div class="iB right" id="installation">
-			<div id="installCode">
-                <span>//Installation is easy</span><br><br>
-                curl -O "http://snatch-it.org/releases/snatch.py"<br>
-                pip install click<br>
-                pip install requests<br>
-                pip install tqdm
-                <div id="documentation">
-                    <a href=""><button>How do I use Snatch?</button></a>
-                </div>
-			</div>
-		</div>
-	</div>
-    <script src="{{ base_url() }}/js/homeHero.js"></script>
+        </div>
+    </div>
+    <!--<script src="{{ base_url() }}/js/homeHero.js"></script>-->
 {% endblock %}
