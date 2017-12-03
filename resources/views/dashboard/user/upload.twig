@@ -1,9 +1,0 @@
-{% extends 'templates/dashboard.twig' %}
-
-{% block content %}
-    <form action="{{ path_for('dashboard.user.uploadasset') }}" method="post" enctype="multipart/form-data">
-        <input type="file" name="fileToUpload" id="fileToUpload">
-        {{ csrf.field | raw }}
-        <input type="submit" value="Upload File" name="submit">
-    </form>
-{% endblock %}

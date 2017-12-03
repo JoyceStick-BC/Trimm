@@ -13,8 +13,7 @@
 		protected $fillable = [
 			'email',
 			'name',
-			'password',
-            'username'
+			'password'
 		];
 
 		public function setPassword($password) {

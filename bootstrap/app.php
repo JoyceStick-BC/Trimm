@@ -89,10 +89,6 @@ $container['BundleController'] = function ($container) {
     return new \Carbon\Controllers\BundleController($container);
 };
 
-$container['DashboardController'] = function ($container) {
-    return new \Carbon\Controllers\DashboardController($container);
-};
-
 $container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
 };

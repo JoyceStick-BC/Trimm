@@ -23,12 +23,6 @@ $app->group('', function () {
 
     $this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
     $this->post('/auth/password/change', 'PasswordController:postChangePassword');
-
-    $this->group('/dashboard', function () {
-        $this->get('/profile', 'DashboardController:getProfile')->setName('dashboard.user.profile');
-        $this->get('/upload', 'DashboardController:getUpload')->setName('dashboard.user.uploadasset');
-        $this->post('/upload', 'DashboardController:postUpload');
-    });
 })->add(new AuthMiddleware($container));
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');
