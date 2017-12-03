@@ -1,3 +1,8 @@
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
 * {
     -webkit-font-smoothing: antialiased;
 }
@@ -6,6 +11,11 @@
 .right {float: right}
 .clear {clear: both}
 .wrapper {display: inline-block;}
+
+.vw60 {
+    width: 60vw;
+    margin:auto;
+}
 
 #nav {
     width: 100vw;
@@ -58,7 +68,6 @@ body#home {
     background: -webkit-linear-gradient(to left, #56ccf2, #2f80ed); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to left, #56ccf2, #2f80ed); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: #20176f;
-    margin: 0px;
     overflow: hidden;
     background-size: 100%;
 }

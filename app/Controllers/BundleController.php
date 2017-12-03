@@ -63,7 +63,6 @@ class BundleController extends Controller {
             );
         }
 
-        echo "<pre>";
         echo json_encode($response, JSON_PRETTY_PRINT);
         exit();
     }
