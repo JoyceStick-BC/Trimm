@@ -17,12 +17,10 @@ class DashboardController extends Controller {
         $name = explode('.', $fileName)[0];
         $username = $this->container->auth->user()->username;
 
-        $hash = md5($username . time() . $name);
+        $identifier = time() . $username . $name;
 
-        $target_dir = "/var/www/trimm3d.com/public_html/public/bundles/";
-        $target_file = $target_dir . basename($hash . '.zip');
-
-
+        $target_file = "/var/www/trimm3d.com/public_html/public/bundles/temp/asset/". $identifier . '.zip';
+        move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
         $infoJson = [
             "type" => "asset",
@@ -31,8 +29,19 @@ class DashboardController extends Controller {
             "name" => $name,
             "bundlename" => $username . "/" .$name
         ];
+        $jsonFile = fopen("/var/www/trimm3d.com/public_html/public/bundles/temp/json/{$identifier}.txt", "w");
+        fwrite($jsonFile, json_encode($infoJson));
+        fclose($jsonFile);
 
-        move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+        $hash = md5($identifier);
+
+        $zip = new \ZipArchive();
+        if ($zip->open("/var/www/trimm3d.com/public_html/public/bundles/{$hash}.zip", \ZipArchive::CREATE) === TRUE)
+        {
+            $zip->addFile("/var/www/trimm3d.com/public_html/public/bundles/temp/json/{$identifier}.txt", "info.json");
+            $zip->addFile("/var/www/trimm3d.com/public_html/public/bundles/temp/asset/". $identifier . '.zip', "{$name}.zip");
+            $zip->close();
+        }
 
         $bundle = Bundle::create([
             'user' => $username,
@@ -40,5 +49,6 @@ class DashboardController extends Controller {
             'hash' => $hash,
             'version' => "1"
         ]);
+        return $response->withRedirect($this->router->pathFor('dashboard.user.uploadasset'));
     }
 }
