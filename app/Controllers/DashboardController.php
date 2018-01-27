@@ -6,6 +6,11 @@ use Carbon\Models\Bundle;
 
 class DashboardController extends Controller {
     public function getProfile($request, $response, $args) {
+        // Todo: query for this user's bundles, pass this into the view
+
+        //echo "<pre>";
+        //var_dump($this->auth->user()->username);
+
         return $this->view->render($response, 'dashboard/user/profile.twig');
     }
     public function getUpload($request, $response) {
