@@ -8,3 +8,5 @@ class HomeController extends Controller {
 		return $this->view->render($response, 'home.twig');
 	}
 }
+
+//$user = $this->container->auth->user();
