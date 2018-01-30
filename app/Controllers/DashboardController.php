@@ -2,17 +2,33 @@
 
 namespace Carbon\Controllers;
 use \Slim\Views\Twig as View;
+use Carbon\Models\User;
 use Carbon\Models\Bundle;
 
 class DashboardController extends Controller {
     public function getProfile($request, $response, $args) {
-        // Todo: query for this user's bundles, pass this into the view
+        if (isset($args['username'])) {
+            $username = $args["username"];
+        } else {
+            $username = $this->auth->user()->username;
+        }
+        $user = User::where('username', $username)->first();
+        
+        if(!$user) {
+            //404
+            echo "user not found";
+            exit();
+        }
 
-        //echo "<pre>";
-        //var_dump($this->auth->user()->username);
+        $bundles = Bundle::where('user', $username)->get();
 
-        return $this->view->render($response, 'dashboard/user/profile.twig');
+        return $this->view->render($response, 'dashboard/user/profile.twig', [
+            'userBundles' => $bundles,
+            'user' => $user
+        ]);
+        
     }
+
     public function getUpload($request, $response) {
         return $this->view->render($response, 'dashboard/user/upload.twig');
     }

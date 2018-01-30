@@ -1,4 +1,13 @@
 {% extends 'templates/dashboard.twig' %}
+
+
 {% block content %}
-<h2>hello</h2>
+
+<h2>Hello, {{ user.name }}</h2>
+<ul>
+{% for bundle in userBundles %}
+	<li>{{ bundle.bundleName }}</li>	
+{% endfor %}
+</ul>
+
 {% endblock %}
