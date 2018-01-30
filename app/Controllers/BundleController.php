@@ -82,8 +82,10 @@ class BundleController extends Controller {
             'type' => 'bundle',
             'body' => [
                 'query' => [
-                    'match' => [
-                        'bundleName' => $request->getParam('query'),
+                    'multi_match' => [
+                        'query' => $request->getParam('query'),
+                        //will find best matches, can add more columns (like description)
+                        'fields' => ['bundleName', 'user']
                     ]
                 ]
             ]
