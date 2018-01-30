@@ -18,17 +18,14 @@ $app->group('', function () {
     $this->post('/auth/signin', 'AuthController:postSignIn');
 })->add(new GuestMiddleware($container));
 
-$app->group('', function() {
-    $this->get('/browse', 'BundleController:getBrowse')->setName('bundles.browse');
-    $this->post('/browse', 'BundleController:postBrowse');
-})->add(new AuthMiddleware($container));
-
-
 $app->group('', function () {
     $this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
 
     $this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
     $this->post('/auth/password/change', 'PasswordController:postChangePassword');
+
+    $this->get('/browse', 'BundleController:getBrowse')->setName('bundles.browse');
+    $this->post('/browse', 'BundleController:postBrowse');
 
     $this->group('/dashboard', function () {
         $this->get('/profile[/{username}]', 'DashboardController:getProfile')->setName('dashboard.user.profile');

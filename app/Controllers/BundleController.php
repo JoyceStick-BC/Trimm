@@ -3,6 +3,7 @@
 namespace Carbon\Controllers;
 use \Slim\Views\Twig as View;
 use Carbon\Models\Bundle;
+use Elasticsearch\ClientBuilder;
 
 class BundleController extends Controller {
     public function downloadBundle($request, $response, $args) {
@@ -72,11 +73,16 @@ class BundleController extends Controller {
     }
 
     public function postBrowse($request, $response) {
-        if (!$this->es->ping()) {
+
+        $client = new ClientBuilder;
+        $client = $client->create()->build();
+
+        if (!$client->ping()) {
             echo "Unable to connect to Elasticsearch server.";
             exit();
         }
 
+        //EDIT THE FOLLOWING TO IMPROVE SEARCH QUERIES
         $params = [
             'index' => 'bundles',
             'type' => 'bundle',
@@ -85,13 +91,14 @@ class BundleController extends Controller {
                     'multi_match' => [
                         'query' => $request->getParam('query'),
                         //will find best matches, can add more columns (like description)
-                        'fields' => ['bundleName', 'user']
+                        'fields' => ['bundleName', 'user'],
+                        'fuzziness' => '5'
                     ]
                 ]
             ]
         ];
 
-        $bundles = $this->es->search($params);
+        $bundles = $client->search($params);
         $bundles = $bundles['hits']['hits'];
 
         return $this->view->render($response, 'browse.twig', [

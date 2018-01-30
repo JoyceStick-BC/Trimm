@@ -99,33 +99,6 @@ $container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
 };
 
-$container['es'] = function($container) {
-
-	 /*$bundles = Bundle::all();
-
-        $bundles->each(function($bundle) use ($client) {
-            //create an index to be searched for every bundle
-            $params = [
-                'index' => 'bundles',
-                'type' => 'bundle',
-                'id' => $bundle->id,
-                'body' => [
-                    'user' => $bundle->user,
-                    'bundleName' => $bundle->bundleName
-                ]
-            ];
-
-            $indexed = $client->index($params);
-    });*/
-
-    /*
-    * https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/_indexing_documents.html
-    */
-
-	$client = new Elasticsearch\ClientBuilder;
-	return $client->create()->build();
-};
-
 //middle ware
 $app->add(new \Carbon\Middleware\ValidationErrorsMiddleware($container));
 $app->add(new \Carbon\Middleware\OldInputMiddleware($container));
