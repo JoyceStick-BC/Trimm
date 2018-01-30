@@ -18,6 +18,8 @@ $app->group('', function () {
     $this->post('/auth/signin', 'AuthController:postSignIn');
 })->add(new GuestMiddleware($container));
 
+$app->get('/browse', 'BundleController:getBrowse')->setName('bundles.browse');
+
 $app->group('', function () {
     $this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
 

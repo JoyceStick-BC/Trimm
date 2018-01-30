@@ -66,4 +66,8 @@ class BundleController extends Controller {
         echo json_encode($response, JSON_PRETTY_PRINT);
         exit();
     }
+
+    public function getBrowse($request, $response) {
+        return $this->view->render($response, 'browse.twig');
+    }
 }
