@@ -8,6 +8,8 @@ ini_set('display_errors', 1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Elasticsearch\ClientBuilder;
+
 $dotenv = new Dotenv\Dotenv(__DIR__);
 $dotenv->load();
 
@@ -98,7 +100,9 @@ $container['csrf'] = function($container) {
 };
 
 $container['es'] = function($container) {
-	return new Elasticsearch\ClientBuilder;
+
+	$client = new Elasticsearch\ClientBuilder;
+	return $client->create()->build();
 };
 
 //middle ware

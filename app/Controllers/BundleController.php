@@ -69,7 +69,48 @@ class BundleController extends Controller {
 
     public function getBrowse($request, $response) {
         $client = $this->es;
-        var_dump($client);
+
+        if (!$client) {
+            echo "Unable to connect to Elasticsearch client.";
+            exit();
+        }
+
+        echo "<pre>";
+
+        $bundles = Bundle::all();
+
+        $bundles->each(function($bundle) use ($client) {
+            //create an index to be searched for every bundle
+            $params = [
+                'index' => 'bundles',
+                'type' => 'bundle',
+                'id' => $bundle->id,
+                'body' => [
+                    'user' => $bundle->user,
+                    'bundleName' => $bundle->bundleName
+                ]
+            ];
+
+            $indexed = $client->index($params);
+        });
+
+        $params = [
+            'index' => 'bundles',
+            'type' => 'bundle',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'bundleName' => 'car',
+                    ]
+                ]
+            ]
+        ];
+
+
+        $temp = $client->search($params);
+
+        //$temp = $client->index($params);
+        var_dump($temp);
 
         //return $this->view->render($response, 'browse.twig');
     }
