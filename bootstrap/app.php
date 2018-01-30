@@ -97,6 +97,10 @@ $container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
 };
 
+$container['es'] = function($container) {
+	return new Elasticsearch\ClientBuilder;
+};
+
 //middle ware
 $app->add(new \Carbon\Middleware\ValidationErrorsMiddleware($container));
 $app->add(new \Carbon\Middleware\OldInputMiddleware($container));

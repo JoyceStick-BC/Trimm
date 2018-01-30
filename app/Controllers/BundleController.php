@@ -68,6 +68,9 @@ class BundleController extends Controller {
     }
 
     public function getBrowse($request, $response) {
-        return $this->view->render($response, 'browse.twig');
+        $client = $this->es;
+        var_dump($client);
+
+        //return $this->view->render($response, 'browse.twig');
     }
 }
