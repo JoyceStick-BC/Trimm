@@ -68,6 +68,10 @@ class BundleController extends Controller {
     }
 
     public function getBrowse($request, $response) {
+        return $this->view->render($response, 'browse.twig');
+    }
+
+    public function postBrowse($request, $response) {
         $client = $this->es;
 
         if (!$client) {
@@ -75,43 +79,24 @@ class BundleController extends Controller {
             exit();
         }
 
-        echo "<pre>";
-
-        $bundles = Bundle::all();
-
-        $bundles->each(function($bundle) use ($client) {
-            //create an index to be searched for every bundle
-            $params = [
-                'index' => 'bundles',
-                'type' => 'bundle',
-                'id' => $bundle->id,
-                'body' => [
-                    'user' => $bundle->user,
-                    'bundleName' => $bundle->bundleName
-                ]
-            ];
-
-            $indexed = $client->index($params);
-        });
-
         $params = [
             'index' => 'bundles',
             'type' => 'bundle',
             'body' => [
                 'query' => [
                     'match' => [
-                        'bundleName' => 'car',
+                        'bundleName' => $request->getParam('search'),
                     ]
                 ]
             ]
         ];
 
 
-        $temp = $client->search($params);
+        $bundles = $client->search($params);
+        $bundles = $bundles['hits']['hits'];
 
-        //$temp = $client->index($params);
-        var_dump($temp);
-
-        //return $this->view->render($response, 'browse.twig');
+        return $this->view->render($response, 'browse.twig', [
+            'results' => $bundles,
+        ]);
     }
 }

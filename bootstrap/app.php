@@ -101,6 +101,23 @@ $container['csrf'] = function($container) {
 
 $container['es'] = function($container) {
 
+	 /*$bundles = Bundle::all();
+
+        $bundles->each(function($bundle) use ($client) {
+            //create an index to be searched for every bundle
+            $params = [
+                'index' => 'bundles',
+                'type' => 'bundle',
+                'id' => $bundle->id,
+                'body' => [
+                    'user' => $bundle->user,
+                    'bundleName' => $bundle->bundleName
+                ]
+            ];
+
+            $indexed = $client->index($params);
+    });*/
+
 	$client = new Elasticsearch\ClientBuilder;
 	return $client->create()->build();
 };

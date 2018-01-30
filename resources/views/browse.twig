@@ -1,7 +1,17 @@
 {% extends 'templates/app.twig' %}
 {% block content %}
 	<h2>Search for a bundle below:</h2>
-	<input type="text" name="search">
+	<form action="{{ path_for('bundles.browse') }}" method="post">
+		<input type="text" name="search">
+		{{ csrf.field | raw }}
+		<button>Search</button>
+	</form>
+	<ul>
+		{% for bundle in results %}
+			<li>{{bundle._source.bundleName}} | {{bundle._source.user}}</li>
+		{% endfor %}
+	</ul>
+	
 	<script type="text/javascript">
 		var elasticsearch = require('elasticsearch');
 
