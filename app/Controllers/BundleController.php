@@ -72,10 +72,8 @@ class BundleController extends Controller {
     }
 
     public function postBrowse($request, $response) {
-        $client = $this->es;
-
-        if (!$client) {
-            echo "Unable to connect to Elasticsearch client.";
+        if (!$this->es->ping()) {
+            echo "Unable to connect to Elasticsearch server.";
             exit();
         }
 
@@ -85,17 +83,17 @@ class BundleController extends Controller {
             'body' => [
                 'query' => [
                     'match' => [
-                        'bundleName' => $request->getParam('search'),
+                        'bundleName' => $request->getParam('query'),
                     ]
                 ]
             ]
         ];
 
-
-        $bundles = $client->search($params);
+        $bundles = $this->es->search($params);
         $bundles = $bundles['hits']['hits'];
 
         return $this->view->render($response, 'browse.twig', [
+            'query' => $request->getParam('query'),
             'results' => $bundles,
         ]);
     }

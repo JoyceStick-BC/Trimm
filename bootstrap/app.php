@@ -118,6 +118,10 @@ $container['es'] = function($container) {
             $indexed = $client->index($params);
     });*/
 
+    /*
+    * https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/_indexing_documents.html
+    */
+
 	$client = new Elasticsearch\ClientBuilder;
 	return $client->create()->build();
 };
