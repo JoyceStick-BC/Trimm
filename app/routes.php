@@ -33,7 +33,7 @@ $app->group('', function () {
     });
 })->add(new AuthMiddleware($container));
 
-$app->get('/api/browse[/{query}]', 'BundleController:getBrowseWithQuery')->setName('bundles.browseWithQuery');
+$app->get('/api/browse[/{query}]', 'BundleController:getBrowseWithQuery')->setName('bundles.getBrowse');
 
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');

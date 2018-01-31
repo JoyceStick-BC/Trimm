@@ -2,17 +2,12 @@
 {% block content %}
 	<h2>Search for a bundle below:</h2>
 	<form action="{{ path_for('bundles.browse') }}" method="post">
-		<input type="text" name="query" id="query">
+		<input type="text" name="query" id="query" autocomplete="off">
 		{{ csrf.field | raw }}
 		<button>Search</button>
 	</form>
-	{% if query %}
-		<p>Results for: {{ query }}</p>
-	{% endif %}
-	<ul>
-		{% for bundle in results %}
-			<li>{{bundle._source.bundleName}} | {{bundle._source.user}} | {{bundle._source.description}}</li>
-		{% endfor %}
+	<ul id="results">
+
 	</ul>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script type="text/javascript">
@@ -20,15 +15,26 @@
 		var csrfValue = $('[name="csrf_value"').val();
 	
 		$('#query').on('input', function() {
+			//make ajax request
 			var val = $('#query').val()
 			var results = $.ajax({
 				type: "GET",
 				dataType: 'text',
-				url: '{{ path_for('bundles.browseWithQuery') }}' + '/' + val,
+				url: '{{ path_for('bundles.getBrowse') }}' + '/' + val,
 				success: function(data) {
-					var result = ($.parseJSON(JSON.stringify(data)));
+					$('#results').html("");
+					var result = (JSON.parse(data));
+
 					for (var i = 0; i < result.length; i++) {
-						console.log(result[i]);
+						var source = result[i]['_source'];
+						//build list of results
+						$('#results').html(
+							$('#results').html() 
+							+ "<li>" 
+							+ source['user'] + " | "
+							+ source['bundleName'] + " | "
+							+ source['description']
+						);
 					}
 				}
 			});
