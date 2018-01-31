@@ -22,9 +22,9 @@ class DashboardController extends Controller {
 
         $bundles = Bundle::where('user', $username)->get();
 
-        return $this->view->render($response, 'dashboard/user/profile.twig', [
+        return $this->view->render($response, 'dashboard/user/userRepositories.twig', [
             'userBundles' => $bundles,
-            'user' => $user
+            'profileUser' => $user,
         ]);
         
     }

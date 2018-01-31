@@ -1,9 +1,9 @@
-{% extends 'templates/dashboard.twig' %}
+{% extends 'templates/userProfile.twig' %}
 
 
-{% block content %}
+{% block profilecontent %}
 
-<h2>Hello, {{ user.name }}</h2>
+<h2>Hello, {{ profileUser.name }}</h2>
 <ul>
 {% for bundle in userBundles %}
 	<li>{{ bundle.bundleName }}</li>	
