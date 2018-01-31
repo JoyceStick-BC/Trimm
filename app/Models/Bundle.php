@@ -14,6 +14,7 @@ class Bundle extends Model {
         'user',
         'bundleName',
         'hash',
-        'version'
+        'version',
+        'description'
     ];
 }

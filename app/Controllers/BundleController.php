@@ -73,7 +73,6 @@ class BundleController extends Controller {
     }
 
     public function postBrowse($request, $response) {
-
         $client = new ClientBuilder;
         $client = $client->create()->build();
 
@@ -91,7 +90,7 @@ class BundleController extends Controller {
                     'multi_match' => [
                         'query' => $request->getParam('query'),
                         //will find best matches, can add more columns (like description)
-                        'fields' => ['bundleName', 'user'],
+                        'fields' => ['bundleName', 'user', 'description'],
                         'fuzziness' => '5'
                     ]
                 ]

@@ -69,7 +69,8 @@ class DashboardController extends Controller {
             'user' => $username,
             'bundleName' => $name,
             'hash' => $hash,
-            'version' => "1"
+            'version' => "1",
+            'description' => $request->getParam('description'),
         ]);
 
         //add file to elasticsearch server
@@ -82,6 +83,8 @@ class DashboardController extends Controller {
             'body' => [
                 'user' => $username,
                 'bundleName' => $name,
+                'hash' => $hash,
+                'description' => $request->getParam('description'),
             ],
         ];
 
