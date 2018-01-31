@@ -2,7 +2,7 @@
 {% block content %}
 	<h2>Search for a bundle below:</h2>
 	<form action="{{ path_for('bundles.browse') }}" method="post">
-		<input type="text" name="query">
+		<input type="text" name="query" id="query">
 		{{ csrf.field | raw }}
 		<button>Search</button>
 	</form>
@@ -14,7 +14,24 @@
 			<li>{{bundle._source.bundleName}} | {{bundle._source.user}} | {{bundle._source.description}}</li>
 		{% endfor %}
 	</ul>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script type="text/javascript">
-
+		var csrfName = $('[name="csrf_name"').val();
+		var csrfValue = $('[name="csrf_value"').val();
+	
+		$('#query').on('input', function() {
+			var val = $('#query').val()
+			var results = $.ajax({
+				type: "GET",
+				dataType: 'text',
+				url: '{{ path_for('bundles.browseWithQuery') }}' + '/' + val,
+				success: function(data) {
+					var result = ($.parseJSON(JSON.stringify(data)));
+					for (var i = 0; i < result.length; i++) {
+						console.log(result[i]);
+					}
+				}
+			});
+		});
 	</script>
 {% endblock %}

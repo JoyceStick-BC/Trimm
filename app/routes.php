@@ -25,7 +25,6 @@ $app->group('', function () {
     $this->post('/auth/password/change', 'PasswordController:postChangePassword');
 
     $this->get('/browse', 'BundleController:getBrowse')->setName('bundles.browse');
-    $this->post('/browse', 'BundleController:postBrowse');
 
     $this->group('/dashboard', function () {
         $this->get('/profile[/{username}]', 'DashboardController:getProfile')->setName('dashboard.user.profile');
@@ -33,6 +32,9 @@ $app->group('', function () {
         $this->post('/upload', 'DashboardController:postUpload');
     });
 })->add(new AuthMiddleware($container));
+
+$app->get('/api/browse[/{query}]', 'BundleController:getBrowseWithQuery')->setName('bundles.browseWithQuery');
+
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');
 

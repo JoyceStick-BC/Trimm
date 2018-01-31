@@ -72,7 +72,11 @@ class BundleController extends Controller {
         return $this->view->render($response, 'browse.twig');
     }
 
-    public function postBrowse($request, $response) {
+    public function getBrowseWithQuery($request, $response, $args) {
+        if(!isset($args['query'])) {
+            echo "need a query bitch";
+            exit();
+        }
         $client = new ClientBuilder;
         $client = $client->create()->build();
 
@@ -88,7 +92,7 @@ class BundleController extends Controller {
             'body' => [
                 'query' => [
                     'multi_match' => [
-                        'query' => $request->getParam('query'),
+                        'query' => $args['query'],
                         //will find best matches, can add more columns (like description)
                         'fields' => ['bundleName', 'user', 'description'],
                         'fuzziness' => '5'
@@ -100,9 +104,11 @@ class BundleController extends Controller {
         $bundles = $client->search($params);
         $bundles = $bundles['hits']['hits'];
 
-        return $this->view->render($response, 'browse.twig', [
+        echo json_encode($bundles);
+
+        /*return $this->view->render($response, 'browse.twig', [
             'query' => $request->getParam('query'),
             'results' => $bundles,
-        ]);
+        ]);*/
     }
 }
