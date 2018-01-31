@@ -73,10 +73,6 @@ class BundleController extends Controller {
     }
 
     public function getBrowseWithQuery($request, $response, $args) {
-        if(!isset($args['query'])) {
-            echo "need a query bitch";
-            exit();
-        }
         $client = new ClientBuilder;
         $client = $client->create()->build();
 
@@ -104,7 +100,7 @@ class BundleController extends Controller {
         $bundles = $client->search($params);
         $bundles = $bundles['hits']['hits'];
 
-        echo json_encode($bundles);
+        return $response->withJson($bundles);
 
         /*return $this->view->render($response, 'browse.twig', [
             'query' => $request->getParam('query'),

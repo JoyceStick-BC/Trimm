@@ -16,7 +16,13 @@
 	
 		$('#query').on('input', function() {
 			//make ajax request
-			var val = $('#query').val()
+			var val = $('#query').val();
+			if (val == "") {
+				//if the input is empty, clear the results
+				$('#results').html("");
+				return;
+			}
+			//ajax request
 			var results = $.ajax({
 				type: "GET",
 				dataType: 'text',
@@ -34,6 +40,7 @@
 							+ source['user'] + " | "
 							+ source['bundleName'] + " | "
 							+ source['description']
+							+ "</li>"
 						);
 					}
 				}
