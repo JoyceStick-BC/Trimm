@@ -34,18 +34,9 @@ class AccountController extends Controller {
 		  "source" => $token,
 		));
 
-    	//this may need to be removed if we are just creating a customer to store
-    	//later we will query for $customer->id
-    	
-		$charge = \Stripe\Charge::create(array(
-		  "amount" => 1000,
-		  "currency" => "usd",
-		  "customer" => $customer->id
-		));
+    	User::where('email', $email)->update(array('stripe_id' => $customer->id));
 
-		//HERE: save $customer->id in a database for later
-
-		//LATER: query for customer id and create charge again with:
+		//LATER: query for customer id and create charge with:
 
 		/*	
 		$charge = \Stripe\Charge::create(array(
@@ -54,5 +45,8 @@ class AccountController extends Controller {
 		  "customer" => $customer_id
 		));
 		*/
+
+		$this->flash->addMessage('success', 'Payment information saved successfully');
+		return $this->view->render($response, 'home.twig');
     }
 }
