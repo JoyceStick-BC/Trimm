@@ -27,6 +27,7 @@ class AccountController extends Controller {
     	//grab token for payment
     	$token = $request->getParam('stripeToken');
     	$email = $this->auth->user()->email;
+    	$username = $this->auth->user()->username;
 
     	var_dump($token);
 
@@ -35,7 +36,7 @@ class AccountController extends Controller {
 		  "source" => $token,
 		));
 
-    	User::where('email', $email)->update(array('stripe_id' => $customer->id));
+    	User::where('username', $username)->update(array('stripe_id' => $customer->id));
 
 		//LATER: query for customer id and create charge with:
 
@@ -49,6 +50,15 @@ class AccountController extends Controller {
 
 		$this->flash->addMessage('success', 'Payment information saved successfully');
 		return $this->view->render($response, 'home.twig');
+    }
+
+    public function postCharge($request, $response) {
+    	//get information about user (username/password/more?)
+    	/*$username = $request->getParam('username');
+    	$password = $request->getParam('password');
+
+    	$id = User::select('stripe_id')->where('username', $username)->andWhere('password', $password)->get();
+    	var_dump($id);*/
     }
 
 }
