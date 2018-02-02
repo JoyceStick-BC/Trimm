@@ -9,8 +9,8 @@ use \Stripe\Stripe;
 class AccountController extends Controller {
 	public function getPayment($request, $response) {
 		$stripe = array(
-		  "secret_key"      => "sk_test_BQokikJOvBiI2HlWgH4olfQ2",
-		  "publishable_key" => "pk_test_6pRNASCoBOKtIshFeQd4XMUh"
+		  "secret_key"      => getenv('STR_SEC'),
+		  "publishable_key" => getenv('STR_PUB')
 		);
 
 		Stripe::setApiKey($stripe['secret_key']);
@@ -21,9 +21,8 @@ class AccountController extends Controller {
     }
 
     public function postPayment($request, $response) {
-
     	//update later w/ real api key
-    	\Stripe\Stripe::setApiKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2");
+    	\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
 
     	//grab token for payment
     	$token = $request->getParam('stripeToken');
@@ -49,4 +48,5 @@ class AccountController extends Controller {
 		$this->flash->addMessage('success', 'Payment information saved successfully');
 		return $this->view->render($response, 'home.twig');
     }
+
 }
