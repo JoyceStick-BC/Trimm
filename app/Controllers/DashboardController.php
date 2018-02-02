@@ -92,8 +92,4 @@ class DashboardController extends Controller {
 
         return $response->withRedirect($this->router->pathFor('dashboard.user.uploadasset'));
     }
-
-    public function getPayment($request, $response) {
-        return $this->view->render($response, 'dashboard/payment.twig');
-    }
 }
