@@ -54,11 +54,16 @@ class AccountController extends Controller {
 
     public function postCharge($request, $response) {
     	//get information about user (username/password/more?)
+
     	/*$username = $request->getParam('username');
     	$password = $request->getParam('password');
 
     	$id = User::select('stripe_id')->where('username', $username)->andWhere('password', $password)->get();
     	var_dump($id);*/
+    }
+
+    public function getBankInfo($request, $response) {
+    	return $this->view->render($response, 'dashboard/bankInfo.twig');
     }
 
 }
