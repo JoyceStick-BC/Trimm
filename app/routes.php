@@ -10,6 +10,9 @@ use Carbon\Middleware\GuestMiddleware;
 
 $app->get('/', 'HomeController:index')->setName('home');
 
+
+$app->get('/bundle/{username}/{bundlename}', 'HomeController:index')->setName('bundle.page');
+
 $app->group('', function () {
     $this->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup');
     $this->post('/auth/signup', 'AuthController:postSignUp');

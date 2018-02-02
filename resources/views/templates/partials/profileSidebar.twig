@@ -1,3 +1,16 @@
-<img src="{{ base_url()}}/img/profile/{{profileUser.img}}">
-{{profileUser.name}}
-{{profileUser.bio}}
+<div id="profileSidebar">
+	<div class="profileSidebarSection">
+		<div id="profileImage">
+			<img src="https://avatars1.githubusercontent.com/u/30324472?s=460&v=4">
+		</div>
+		<h1 id="profileName">{{profileUser.name}}</h1>
+		<div id="profileUsername">{{ profileUser.username }}</div>
+		<p id="profileBio">{{profileUser.bio}}</p>
+	</div>
+	<div class="profileSidebarSection">
+		software i use
+	</div>
+	<div class="profileSidebarSection">
+		social media links
+	</div>
+</div>
