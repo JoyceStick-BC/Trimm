@@ -23,16 +23,12 @@
 	</form>
 	<script type="text/javascript">
 		var stripe = Stripe( '{{ key }}' );
-
 		// Create an instance of Elements
 		var elements = stripe.elements();
-
 		// Create an instance of the card Element
 		var card = elements.create('card');
-
 		// Add an instance of the card Element into the `card-element` <div>
 		card.mount('#card-element');
-
 		// Handle real-time validation errors from the card Element.
 		card.addEventListener('change', function(event) {
 		  var displayError = document.getElementById('card-errors');
@@ -55,6 +51,7 @@
 		      errorElement.textContent = result.error.message;
 		    } else {
 		      // Send the token to your server
+		      console.log(result.token['id']);
 		      $('#stripeToken').val(result.token['id']);
 		      $('#payment-form').submit();
 		    }
