@@ -25,6 +25,7 @@ $app->group('', function () {
     $this->post('/auth/password/change', 'PasswordController:postChangePassword');
 
     $this->group('/dashboard', function () {
+        $this->get('/profile/following[/{username}]', 'DashboardController:getProfileFollowing');
         $this->get('/profile[/{username}]', 'DashboardController:getProfile')->setName('dashboard.user.profile');
         $this->get('/upload', 'DashboardController:getUpload')->setName('dashboard.user.uploadasset');
         $this->post('/upload', 'DashboardController:postUpload');

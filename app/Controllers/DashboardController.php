@@ -4,6 +4,7 @@ namespace Carbon\Controllers;
 use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
+use Carbon\Models\Following;
 
 class DashboardController extends Controller {
     public function getProfile($request, $response, $args) {
@@ -28,7 +29,13 @@ class DashboardController extends Controller {
         ]);
         
     }
+    public function getProfileFollowing($request, $response){
+        $user = User::where('id', 2)->first();
+        $following = Following::where('primaryUser', $user->id)->get();
 
+        return $this->view->render($response, 'dashboard/user/userFollowing.twig');
+
+    }
     public function getUpload($request, $response) {
         return $this->view->render($response, 'dashboard/user/upload.twig');
     }
