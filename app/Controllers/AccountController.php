@@ -66,4 +66,8 @@ class AccountController extends Controller {
     	return $this->view->render($response, 'dashboard/bankInfo.twig');
     }
 
+    public function postBankInfo($request, $response) {
+    	
+    }
+
 }

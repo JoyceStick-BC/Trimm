@@ -3,4 +3,37 @@
 	<p>bank page</p>
     <script src="https://js.stripe.com/v3/"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<form action="{{ path_for('account.postBankInfo') }}" action="post">
+		<p>Country</p>
+		<select id="country">
+	        <option value="US">United States</option>
+	        <option value="CA">Canada</option>
+	        <option value="GB">United Kingdom</option>
+	        <option value="DE">Germany</option>
+	        <option value="FR">France</option>
+	        <option value="ES">Spain</option>
+		<select>
+		<p>Currency</p>
+		<select id="currency">
+	        <option value="USD">US Dollar</option>
+	        <option value="CAD">Canadian Dollar</option>
+	        <option value="GBP">Pound</option>
+	        <option value="EUR">Euro</option>
+      	</select>
+     	<p>Routing Number</p>
+      	<input type="text" id="routing-number">
+      	<p>Account Number</p>
+      	<input type="text" id="account-number">
+     	<p>Account Holder Name</p>
+     	<input type="text" id="account-name">
+     	<p>Account Holder Type</p>
+     	<select id="account-holder-type">
+      		<option value="individual">Individual</option>
+        	<option value="company">Company</option>
+      	</select>
+      	<button>Submit</button>
+	</form>
+	<script type="text/javascript">
+		var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+	</script>
 {% endblock %}
