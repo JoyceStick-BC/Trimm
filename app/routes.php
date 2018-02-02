@@ -30,6 +30,7 @@ $app->group('', function () {
         $this->get('/profile[/{username}]', 'DashboardController:getProfile')->setName('dashboard.user.profile');
         $this->get('/upload', 'DashboardController:getUpload')->setName('dashboard.user.uploadasset');
         $this->post('/upload', 'DashboardController:postUpload');
+        $this->get('/payment', 'DashboardController:getPayment')->setName('dashboard.payment');
     });
 })->add(new AuthMiddleware($container));
 
