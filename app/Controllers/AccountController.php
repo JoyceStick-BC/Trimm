@@ -28,6 +28,8 @@ class AccountController extends Controller {
     	$token = $request->getParam('stripeToken');
     	$email = $this->auth->user()->email;
 
+    	var_dump($token);
+
     	$customer = \Stripe\Customer::create(array(
 		  "email" => $email,
 		  "source" => $token,
