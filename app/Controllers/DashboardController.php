@@ -4,6 +4,7 @@ namespace Carbon\Controllers;
 use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
+use Elasticsearch\ClientBuilder;
 
 class DashboardController extends Controller {
     public function getProfile($request, $response, $args) {
@@ -68,8 +69,27 @@ class DashboardController extends Controller {
             'user' => $username,
             'bundleName' => $name,
             'hash' => $hash,
-            'version' => "1"
+            'version' => "1",
+            'description' => $request->getParam('description'),
         ]);
+
+        //add file to elasticsearch server
+        $client = new ClientBuilder;
+        $client = $client->create()->build();
+
+        $params = [
+            'index' => 'bundles',
+            'type' => 'bundle',
+            'body' => [
+                'user' => $username,
+                'bundleName' => $name,
+                'hash' => $hash,
+                'description' => $request->getParam('description'),
+            ],
+        ];
+
+        $indexed = $client->index($params);
+
         return $response->withRedirect($this->router->pathFor('dashboard.user.uploadasset'));
     }
 }

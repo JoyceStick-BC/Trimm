@@ -6,6 +6,7 @@
         "illuminate/database": "^5.3",
         "slim/csrf": "^0.8.1",
         "slim/flash": "^0.2.0",
+        "elasticsearch/elasticsearch": "^5.3",
         "vlucas/phpdotenv": "^2.4"
     },
     "autoload": {

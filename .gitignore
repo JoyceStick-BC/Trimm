@@ -7,3 +7,4 @@ bootstrap/.env
 **/._.DS_Store
 public/bundles/
 .idea
+composer.phar
