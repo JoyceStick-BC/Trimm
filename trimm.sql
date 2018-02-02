@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 31, 2018 at 05:31 PM
+-- Generation Time: Feb 02, 2018 at 02:55 AM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 5.6.31
 
@@ -71,6 +71,7 @@ CREATE TABLE `users` (
   `name` varchar(1000) NOT NULL,
   `username` varchar(500) NOT NULL,
   `password` varchar(1000) NOT NULL,
+  `stripe_id` varchar(1000) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -79,9 +80,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `name`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'aliem@bc.edu', 'Emaad Ali', 'emaadali', '$2y$10$QtDAANODnzxIfseevnWEI.YdIgGERvuF17wAOJLGqVIf6zEdMY7b6', '2018-01-27 23:45:50', '2018-01-30 08:16:08'),
-(2, 'kyle@efds.com', 'earefdc', 'kyle', 'sdfgx', '2018-01-30 00:55:50', NULL);
+INSERT INTO `users` (`id`, `email`, `name`, `username`, `password`, `stripe_id`, `created_at`, `updated_at`) VALUES
+(1, 'aliem@bc.edu', 'Emaad Ali', 'emaadali', '$2y$10$QtDAANODnzxIfseevnWEI.YdIgGERvuF17wAOJLGqVIf6zEdMY7b6', 'cus_CFOYwiagC5xbkO', '2018-01-27 23:45:50', '2018-02-02 07:54:41'),
+(2, 'kyle@efds.com', 'earefdc', 'kyle', 'sdfgx', NULL, '2018-01-30 00:55:50', NULL);
 
 --
 -- Indexes for dumped tables
