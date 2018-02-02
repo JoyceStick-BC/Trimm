@@ -15,6 +15,6 @@ class Bundle extends Model {
         'bundleName',
         'hash',
         'version',
-        'description'
+        'description',
     ];
 }
