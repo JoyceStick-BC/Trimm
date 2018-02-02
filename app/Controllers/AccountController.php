@@ -67,7 +67,7 @@ class AccountController extends Controller {
     }
 
     public function postBankInfo($request, $response) {
-    	
+    	var_dump($request->getParam('bank-token'));
     }
 
 }

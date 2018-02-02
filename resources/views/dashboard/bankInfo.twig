@@ -1,9 +1,9 @@
 {% extends 'templates/dashboard.twig' %}
 {% block content %}
-	<p>bank page</p>
-    <script src="https://js.stripe.com/v3/"></script>
+	<h1>Bank Account Information:</h1>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<form action="{{ path_for('account.postBankInfo') }}" action="post">
+	<form action="{{ path_for('account.postBankInfo') }}" method="post" id="bank-form">
 		<p>Country</p>
 		<select id="country">
 	        <option value="US">United States</option>
@@ -31,9 +31,34 @@
       		<option value="individual">Individual</option>
         	<option value="company">Company</option>
       	</select>
+      	<p id="bank-errors"></p>
+      	{{ csrf.field | raw }}
+      	<input type="text" name="bank-token" id="bank-token" style="display:none">
       	<button>Submit</button>
 	</form>
 	<script type="text/javascript">
-		var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+		Stripe.setPublishableKey('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+
+		var form = document.getElementById('bank-form');
+		form.addEventListener('submit', function(event) {
+			console.log('function ran');
+			event.preventDefault();
+			Stripe.bankAccount.createToken({
+				country: $('#country').val(),
+				currency: $('#currency').val(),
+				routing_number: $('#routing-number').val(),
+				account_number: $('#account-number').val(),
+  				account_holder_name: $('#account-name').val(),
+  				account_holder_type: $('#account_holder_type').val()
+			}, function(status, response) {
+				if (response.error) {
+					$('#bank-errors').text(response.error.message);
+				} else {
+					console.log(response.id);
+					$('#bank-token').val(response.id);
+					$('#bank-form').submit();
+				}
+			});
+		})
 	</script>
 {% endblock %}
