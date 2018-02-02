@@ -1,10 +1,12 @@
 {% extends 'templates/dashboard.twig' %}
 {% block content %}
     <p>payment page</p>
-    <form action="charge.php" method="post">
-	 <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-	          data-key={{ key }}
-	          data-description="Test"
-	          data-locale="auto"></script>
+    <form action={{ path_for('account.postPayment')}} method="post">
+		<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+		          data-key={{ key }}
+		          data-description="Test"
+		          data-locale="auto">
+		</script>
+	 	{{ csrf.field | raw }}
 	</form>
 {% endblock %}

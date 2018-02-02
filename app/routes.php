@@ -33,7 +33,8 @@ $app->group('', function () {
     });
 
     $this->group('/account', function() {
-        $this->get('/payment', 'AccountController:getPayment')->setName('dashboard.payment');
+        $this->get('/payment', 'AccountController:getPayment')->setName('account.getPayment');
+        $this->post('/payment', 'AccountController:postPayment')->setName('account.postPayment');
     });
 })->add(new AuthMiddleware($container));
 
