@@ -67,7 +67,11 @@ class AccountController extends Controller {
     }
 
     public function postBankInfo($request, $response) {
-    	var_dump($request->getParam('bank-token'));
+    	$bank_id = $request->getParam('bank-token');
+    	$username = $this->auth->user()->username;
+    	//update bank_id in db
+    	User::where('username', $username)->update(array('bank_id' => $bank_id));
+    	return $this->view->render($response, 'home.twig');
     }
 
 }

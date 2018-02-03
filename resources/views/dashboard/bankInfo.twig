@@ -54,7 +54,6 @@
 				if (response.error) {
 					$('#bank-errors').text(response.error.message);
 				} else {
-					console.log(response.id);
 					$('#bank-token').val(response.id);
 					$('#bank-form').submit();
 				}

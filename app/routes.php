@@ -38,6 +38,7 @@ $app->group('', function () {
         $this->get('/bankInfo', 'AccountController:getBankInfo')->setName('account.getBankInfo');
         $this->post('/bankInfo', 'AccountController:postBankInfo')->setName('account.postBankInfo');
     });
+
 })->add(new AuthMiddleware($container));
 
 $app->group('/api', function() {
