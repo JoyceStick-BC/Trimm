@@ -10,9 +10,6 @@ use Carbon\Middleware\GuestMiddleware;
 
 $app->get('/', 'HomeController:index')->setName('home');
 
-
-$app->get('/bundle/{username}/{bundlename}', 'HomeController:index')->setName('bundle.page');
-
 $app->group('', function () {
     $this->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup');
     $this->post('/auth/signup', 'AuthController:postSignUp');
@@ -33,6 +30,9 @@ $app->group('', function () {
         $this->get('/upload', 'DashboardController:getUpload')->setName('dashboard.user.uploadasset');
         $this->post('/upload', 'DashboardController:postUpload');
     });
+    $this->group('/bundle', function(){
+        $this->get('/{username}/{bundle}', 'BundleController:getBundle')->setName('bundles.getBundle');
+    }); 
 })->add(new AuthMiddleware($container));
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');

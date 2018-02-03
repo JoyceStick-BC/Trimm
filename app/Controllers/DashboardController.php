@@ -5,6 +5,9 @@ use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
 use Carbon\Models\Following;
+use Carbon\Models\SocialMedia;
+use Carbon\Models\Software;
+
 
 class DashboardController extends Controller {
     public function getProfile($request, $response, $args) {
@@ -23,12 +26,19 @@ class DashboardController extends Controller {
 
         $bundles = Bundle::where('user', $username)->get();
 
+        $SocialMedia = SocialMedia::where('user', $user->username)->first();
+        $Software = Software::where('user', $user->username)->first();
+
+
         return $this->view->render($response, 'dashboard/user/userRepositories.twig', [
             'userBundles' => $bundles,
-            'profileUser' => $user,
+            'profileUser' => $user, 
+            'profileSocial' => $SocialMedia,
+            'profileSoftware'=>$Software
         ]);
         
     }
+
     public function getProfileFollowing($request, $response){
         $user = User::where('id', 2)->first();
         $following = Following::where('primaryUser', $user->id)->get();

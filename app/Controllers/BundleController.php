@@ -40,7 +40,6 @@ class BundleController extends Controller {
                 return $response->withRedirect($path);
         }
     }
-
     public function getLatestVersion($request, $response, $args) {
         $username = $args["username"];
         $bundlename = $args["bundlename"];
@@ -65,5 +64,9 @@ class BundleController extends Controller {
 
         echo json_encode($response, JSON_PRETTY_PRINT);
         exit();
+    }
+    public function getBundle($request, $response, $args) {
+        $bundle = Bundle::where('user', $username)->where('bundleName', $bundlename)->first();        
+        return $this->view->render($response, 'template/bundles.twig',['bundles'=> $bundle]);
     }
 }
