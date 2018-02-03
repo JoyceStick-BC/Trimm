@@ -66,7 +66,9 @@ class BundleController extends Controller {
         exit();
     }
     public function getBundle($request, $response, $args) {
-        $bundle = Bundle::where('user', $username)->where('bundleName', $bundlename)->first();        
-        return $this->view->render($response, 'template/bundles.twig',['bundles'=> $bundle]);
+        $username = $args["username"];
+        $bundlename = $args["bundle"];
+        $bundle = Bundle::where('user', $username)->where('bundleName', $bundlename)->first();    
+        return $this->view->render($response, 'dashboard/bundles/bundle.twig',['bundles'=> $bundle]);
     }
 }
