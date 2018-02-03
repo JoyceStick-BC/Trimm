@@ -37,11 +37,10 @@
       	<button>Submit</button>
 	</form>
 	<script type="text/javascript">
-		Stripe.setPublishableKey('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+		Stripe.setPublishableKey( '{{ pub_key }}' );
 
 		var form = document.getElementById('bank-form');
 		form.addEventListener('submit', function(event) {
-			console.log('function ran');
 			event.preventDefault();
 			Stripe.bankAccount.createToken({
 				country: $('#country').val(),

@@ -21,7 +21,7 @@
 	  <button>Submit Payment</button>
 	</form>
 	<script type="text/javascript">
-		var stripe = Stripe( '{{ key }}' );
+		var stripe = Stripe( '{{ pub_key }}' );
 		// Create an instance of Elements
 		var elements = stripe.elements();
 		// Create an instance of the card Element
@@ -37,7 +37,7 @@
 		    displayError.textContent = '';
 		  }
 		});
-	
+
 		// Handle form submission
 		var form = document.getElementById('payment-form');
 		form.addEventListener('submit', function(event) {

@@ -8,20 +8,16 @@ use \Stripe\Stripe;
 
 class AccountController extends Controller {
 	public function getPayment($request, $response) {
-		$stripe = array(
-		  "secret_key"      => getenv('STR_SEC'),
-		  "publishable_key" => getenv('STR_PUB')
-		);
-
-		Stripe::setApiKey($stripe['secret_key']);
+		//get form key for Stripe
+		$publishable_key = getenv('STR_PUB');
 
         return $this->view->render($response, 'dashboard/payment.twig', [
-        	'key' => $stripe['publishable_key'],
+        	'pub_key' => $publishable_key,
         ]);
     }
 
     public function postPayment($request, $response) {
-    	//update later w/ real api key
+    	//get form key for Stripe
     	\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
 
     	//grab token for payment
@@ -29,18 +25,19 @@ class AccountController extends Controller {
     	$email = $this->auth->user()->email;
     	$username = $this->auth->user()->username;
 
-    	var_dump($token);
-
     	$customer = \Stripe\Customer::create(array(
 		  "email" => $email,
 		  "source" => $token,
 		));
-
+    	
+    	//update the user's payment key in the db
     	User::where('username', $username)->update(array('stripe_id' => $customer->id));
 
 		//LATER: query for customer id and create charge with:
 
 		/*	
+		\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
+
 		$charge = \Stripe\Charge::create(array(
 		  "amount" => 1500, // $15.00 this time
 		  "currency" => "usd",
@@ -63,7 +60,12 @@ class AccountController extends Controller {
     }
 
     public function getBankInfo($request, $response) {
-    	return $this->view->render($response, 'dashboard/bankInfo.twig');
+    	//get form key for stripe
+    	$publishable_key = getenv('STR_PUB');
+
+    	return $this->view->render($response, 'dashboard/bankInfo.twig', [
+    		'pub_key' => $publishable_key,
+    	]);
     }
 
     public function postBankInfo($request, $response) {
@@ -71,6 +73,7 @@ class AccountController extends Controller {
     	$username = $this->auth->user()->username;
     	//update bank_id in db
     	User::where('username', $username)->update(array('bank_id' => $bank_id));
+
     	return $this->view->render($response, 'home.twig');
     }
 
