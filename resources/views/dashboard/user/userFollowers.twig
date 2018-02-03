@@ -1,5 +1,15 @@
-{% extends 'templates/partials/userProfile.twig' %}
+{% extends 'templates/userProfile.twig' %}
 
 {% block profilecontent %}
+	<div id="userFollowers">
+		{% for follower in followers %}
+			<a href="{{path_for('dashboard.user.uploadasset', 
+			{username: followers.username})}}">
+
+			</a>
+
+		{% endfor %}
+		
+	</div>
 
 {% endblock %}

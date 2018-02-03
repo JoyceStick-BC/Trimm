@@ -5,6 +5,9 @@ use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
 use Carbon\Models\Following;
+use Carbon\Models\Followers;
+use Carbon\Models\SocialMedia;
+use Carbon\Models\Software;
 
 class DashboardController extends Controller {
     public function getProfile($request, $response, $args) {
@@ -23,17 +26,42 @@ class DashboardController extends Controller {
 
         $bundles = Bundle::where('user', $username)->get();
 
+        $SocialMedia = SocialMedia::where('user', $user->username)->first();
+        $Software = Software::where('user', $user->username)->first();
+
+
         return $this->view->render($response, 'dashboard/user/userRepositories.twig', [
             'userBundles' => $bundles,
-            'profileUser' => $user,
+            'profileUser' => $user, 
+            'profileSocial' => $SocialMedia,
+            'profileSoftware'=>$Software
         ]);
         
     }
-    public function getProfileFollowing($request, $response){
-        $user = User::where('id', 2)->first();
-        $following = Following::where('primaryUser', $user->id)->get();
 
-        return $this->view->render($response, 'dashboard/user/userFollowing.twig');
+    public function getProfileFollowing($request, $response, $args){
+        $user = User::where('username', $args['username'])->first();
+        $following = $user->getFollowings();
+        
+        if (!$user){
+            echo('Username not found');
+            exit();
+        }
+        return $this->view->render($response, 'dashboard/user/userFollowing.twig', [
+            'user'=>$user, 
+            'following'=>$following]);
+    }
+    public function getProfileFollowers($request, $response, $args){
+        $user = User::where('username', $args['username'])->first();
+        $followers = $user->getFollowers();
+        
+        if (!$user){
+            echo('Username not found');
+            exit();
+        }
+        return $this->view->render($response, 'dashboard/user/userFollowers.twig', [
+            'user'=>$user,
+            'followers'=>$followers]);
 
     }
     public function getUpload($request, $response) {

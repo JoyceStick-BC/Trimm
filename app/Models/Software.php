@@ -5,14 +5,13 @@ namespace Carbon\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Following extends Model {
+class Software extends Model {
     //if the table isnt the plural of the class name, use this:
-    protected $table = 'followings';
+    protected $table = 'Software';
 
     //define which columns can be written to
     protected $fillable = [
-        'primaryUser',
-        'referenceUser'
-        
+        'user',
+        'software'
     ];
 }
