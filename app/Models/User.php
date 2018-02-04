@@ -35,7 +35,7 @@
     	}
 
     	public function getFollowers(){
-    		$followerids = Followers::where('referenceUser', $this->id)->get();
+    		$followerids = Following::where('referenceUser', $this->id)->get();
     		$followers = array(); 
     		foreach ($followerids as $followerid) {
     		 	$followers[] = User::where('id', $followerid->primaryUser)->first();

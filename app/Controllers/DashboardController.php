@@ -41,7 +41,6 @@ class DashboardController extends Controller {
 
     public function getProfileFollowing($request, $response, $args){
         $user = User::where('username', $args['username'])->first();
-        $following = $user->getFollowings();
         
         if (!$user){
             echo('Username not found');
@@ -49,11 +48,11 @@ class DashboardController extends Controller {
         }
         return $this->view->render($response, 'dashboard/user/userFollowing.twig', [
             'user'=>$user, 
-            'following'=>$following]);
+            ]);
     }
+
     public function getProfileFollowers($request, $response, $args){
         $user = User::where('username', $args['username'])->first();
-        $followers = $user->getFollowers();
         
         if (!$user){
             echo('Username not found');
@@ -61,7 +60,7 @@ class DashboardController extends Controller {
         }
         return $this->view->render($response, 'dashboard/user/userFollowers.twig', [
             'user'=>$user,
-            'followers'=>$followers]);
+        ]);
 
     }
     public function getUpload($request, $response) {

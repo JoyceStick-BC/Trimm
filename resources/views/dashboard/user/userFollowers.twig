@@ -2,14 +2,18 @@
 
 {% block profilecontent %}
 	<div id="userFollowers">
-		{% for follower in followers %}
-			<a href="{{path_for('dashboard.user.uploadasset', 
-			{username: followers.username})}}">
+		{% if user.getFollowers()|length > 0 %}
+			{% for follower in user.getFollowers() %}
+				<a href="{{ path_for('dashboard.user.profile', {'username': follower.username}) }}">
+					{{follower.name}}
+					{{follower.username}} 
+					<br>
+				</a>
 
-			</a>
-
-		{% endfor %}
-		
+			{% endfor %}
+		{% else %}
+			No one following me. Sad!
+		{% endif %}
 	</div>
 
 {% endblock %}
