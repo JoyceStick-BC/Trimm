@@ -25,12 +25,17 @@ $app->group('', function () {
     $this->post('/auth/password/change', 'PasswordController:postChangePassword');
 
     $this->group('/dashboard', function () {
+
         $this->get('/profile/following[/{username}]', 'DashboardController:getProfileFollowing')->setName('dashboard.user.following');
         $this->get('/profile/followers[/{username}]', 'DashboardController:getProfileFollowers')->setName('dashboard.user.followers');
+
+        $this->get('/profile/stars[/{username}]', 'DashboardController:getProfileStars');
         $this->get('/profile[/{username}]', 'DashboardController:getProfile')->setName('dashboard.user.profile');
         $this->get('/upload', 'DashboardController:getUpload')->setName('dashboard.user.uploadasset');
         $this->post('/upload', 'DashboardController:postUpload');
+
     });
+
 
     $this->group('/bundle', function(){
         $this->get('/{username}/{bundle}', 'BundleController:getBundle')->setName('bundles.getBundle');

@@ -5,7 +5,11 @@ use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
 use Carbon\Models\Following;
+
 use Carbon\Models\Followers;
+use Carbon\Models\SocialMedia;
+use Carbon\Models\Software;
+
 use Carbon\Models\SocialMedia;
 use Carbon\Models\Software;
 
@@ -39,6 +43,20 @@ class DashboardController extends Controller {
         
     }
 
+    public function getProfileStars($request, $response, $args){
+        $user = User::where('username',$args['username'])->first();
+
+        if (!$user){
+            echo('Username not found');
+            exit();
+        }
+
+        return $this->view->render($response, 'dashboard/user/userStars.twig', [
+            'user'=>$user
+        ]);
+    }
+
+
     public function getProfileFollowing($request, $response, $args){
         $user = User::where('username', $args['username'])->first();
         
@@ -63,6 +81,8 @@ class DashboardController extends Controller {
         ]);
 
     }
+
+
     public function getUpload($request, $response) {
         return $this->view->render($response, 'dashboard/user/upload.twig');
     }

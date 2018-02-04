@@ -1,0 +1,18 @@
+{% extends 'templates/bundles.twig' %}
+
+{% block bundlecontent %}
+	<div class="bundles">
+		<div id="bundleOwner">
+			{{bundles.user}}
+		</div>
+		<h1 id="bundleName">
+			Bundle: {{bundles.bundleName}}
+		</h1>
+		<div id="bundleVersion">
+			Version: {{bundles.version}}
+		</div>
+		<div id="bundleDescription">
+			Description: {{bundles.description}}
+		</div>
+	</div>
+{% endblock %}

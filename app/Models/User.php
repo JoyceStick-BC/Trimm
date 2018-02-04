@@ -34,6 +34,7 @@
     		 return $following;
     	}
 
+
     	public function getFollowers(){
     		$followerids = Following::where('referenceUser', $this->id)->get();
     		$followers = array(); 
@@ -42,6 +43,17 @@
     		 }
     		 return $followers;
 
+    	}
+	}
+
+    	public function getStars(){
+    		$starred_ids = Stars::where('user', $this->id)->get();
+
+    		$starredBundles = array();
+    		foreach ($starred_ids as $starred_id){
+    			$starredBundles[] = Bundle::where('id', $starred_id->bundle_id)->first();
+    		}
+    		return $starredBundles;
     	}
 	}
 
