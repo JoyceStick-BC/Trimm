@@ -69,10 +69,19 @@ class AccountController extends Controller {
     }
 
     public function postBankInfo($request, $response) {
-    	$bank_id = $request->getParam('bank-token');
+        Stripe::setApiKey(getenv('STR_SEC'));
+
+        $acct = \Stripe\Account::create(array(
+            'type' => 'custom',
+            'country' => $request->getParam('country'),
+            'email' => $this->auth->user()->email,
+            'external_account' => $request->getParam('bank-token'),
+        ));
+
     	$username = $this->auth->user()->username;
-    	//update bank_id in db
-    	User::where('username', $username)->update(array('bank_id' => $bank_id));
+
+    	//update account id in db
+    	User::where('username', $username)->update(array('stripe_acct_id' => $acct->id));
 
     	return $this->view->render($response, 'home.twig');
     }
