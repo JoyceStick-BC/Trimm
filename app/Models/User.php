@@ -44,7 +44,7 @@
     		 return $followers;
 
     	}
-	}
+
 
     	public function getStars(){
     		$starred_ids = Stars::where('user', $this->id)->get();
@@ -55,5 +55,6 @@
     		}
     		return $starredBundles;
     	}
+
 	}
 

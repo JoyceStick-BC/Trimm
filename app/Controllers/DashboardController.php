@@ -10,9 +10,6 @@ use Carbon\Models\Followers;
 use Carbon\Models\SocialMedia;
 use Carbon\Models\Software;
 
-use Carbon\Models\SocialMedia;
-use Carbon\Models\Software;
-
 class DashboardController extends Controller {
     public function getProfile($request, $response, $args) {
         if (isset($args['username'])) {
