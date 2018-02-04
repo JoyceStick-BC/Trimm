@@ -167,9 +167,20 @@
     max-width: 940px;
     margin-top: 40px;
 }
+/* profile is the whole background. */
+/* background for userRepositories but not sidebar area in profile page. Layer above profile. */
+#profile, #profileContentArea{
+    background-color: #f4f4f4;
+}
 #profileSidebar {
     width: 290px;
     float:left;
+    border-color: #ededed;
+    border-width: 2px;
+    border-style: groove;
+    border-radius: 5px;
+    background-color: #fcfcfc;
+
 }
 #profileImage {
     width: 100%;
@@ -202,6 +213,8 @@
     text-align: center;
 
 }
+/* background for userRepositories but not sidebar area in profile page. Layer above profile. */
+
 
 #profileSidebar, #profileContentArea {
     display:inline-block;
@@ -213,6 +226,7 @@
 }
 #profileSoftware{
     font-weight: bold;
+    padding: 2px;
 }
 #softwareList{
     border:1px solid #eaecef;
@@ -224,6 +238,8 @@
 }
 #profileSocialMedia{
     font-weight: bold;
+    padding: 2px;
+
 }
 #socialmedia{
     font-weight: normal;
@@ -250,7 +266,7 @@
 #bundleOwner{
     font-weight: 700;
     text-transform: capitalize;
-    font-size: 30px;
+    font-size: 25px;
     margin-bottom: 15px;
     color:#24292e;
 }
@@ -281,9 +297,9 @@
     border:1px solid #eaecef;
     border-radius: 3px;
     padding:16px;
-    margin-bottom: 10px;
     cursor: pointer;
     transition: 0.2s ease all;
+    background-color:white;
 }
 .bundle:hover {
     background-color: #eee;
