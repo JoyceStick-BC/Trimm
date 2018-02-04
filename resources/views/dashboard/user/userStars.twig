@@ -1,0 +1,12 @@
+{% extends 'templates/userProfile.twig' %}
+
+{% block profilecontent %}
+
+{% for star in user.getStars() %}
+	<a href='{{path_for('bundles.getBundle', {'username':star.user,'bundle':star.bundleName})}}'> {{ star.bundleName }} </a>
+{% endfor %}
+
+
+
+
+{% endblock %}
