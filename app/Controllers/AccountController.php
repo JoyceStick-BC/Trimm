@@ -69,6 +69,7 @@ class AccountController extends Controller {
     }
 
     public function postBankInfo($request, $response) {
+        echo "<pre>";
         Stripe::setApiKey(getenv('STR_SEC'));
 
         $username = $this->auth->user()->username;
@@ -76,21 +77,45 @@ class AccountController extends Controller {
 
         if (!$acct->stripe_acct_id) {
             //if the user does not have a stripe custom account, make it
+            $birthday = $request->getParam('birthday');
+            $birthday_year = substr($birthday, 0, 4);
+            $birthday_month = substr($birthday, 5, 2);
+            $birthday_day = substr($birthday, 8, 2);
             $acct = \Stripe\Account::create(array(
                 'type' => 'custom',
                 'country' => $request->getParam('country'),
                 'email' => $this->auth->user()->email,
                 'external_account' => $request->getParam('bank-token'),
+                'legal_entity' => array(
+                    'first_name' => $request->getParam('first-name'),
+                    'last_name' => $request->getParam('last-name'),
+                    'ssn_last_4' => $request->getParam('ssn_last_4'),
+                    'type' => $request->getParam('legal-entity'),
+                    'dob' => array(
+                        'day' => $birthday_day,
+                        'month' => $birthday_month,
+                        'year' => $birthday_year,
+                    ),
+                    'address' => array(
+                        'city' => $request->getParam('address-city'),
+                        'line1' => $request->getParam('address-line-1'),
+                        'postal_code' => $request->getParam('address-postal-code'),
+                        'state' => $request->getParam('state'),
+                    ),
+                ),
             ));
             //add to db
             User::where('username', $username)->update(array('stripe_acct_id' => $acct->id));
+
+            var_dump($acct);
         } else {
             //if the user already has an account, add the bank token to their account
             $acct = \Stripe\Account::retrieve($acct->stripe_acct_id);
+            //this replaces the current account
             $acct->external_accounts->create(array('external_account' => $request->getParam('bank-token')));
         }
 
-    	return $this->view->render($response, 'home.twig');
+    	//return $this->view->render($response, 'home.twig');
     }
 
 }
