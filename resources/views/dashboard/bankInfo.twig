@@ -88,6 +88,7 @@
       	</select>
       	<p>Last 4 of SSN</p>
       	<input type="text" name="ssn_last_4">
+      	{{ csrf.field | raw }}
       	<input type="text" name="bank-token" id="bank-token" style="display:none">
     </form>
 	<h1>Bank Account Information</h1>
@@ -118,13 +119,13 @@
     	<option value="company">Company</option>
   	</select>
   	<p id="bank-errors"></p>
-  	{{ csrf.field | raw }}
-  	<button>Submit</button>
+  	<p>By registering your account, you agree to <a href="https://stripe.com/us/connect-account/legal">the Stripe Connected Account Agreement.</a></p>
+  	<button id="submit">Submit</button>
 	<script type="text/javascript">
 		Stripe.setPublishableKey( '{{ pub_key }}' );
 
-		var form = document.getElementById('bank-form');
-		form.addEventListener('submit', function(event) {
+		var form = document.getElementById('submit');
+		form.addEventListener('click', function(event) {
 			event.preventDefault();
 			Stripe.bankAccount.createToken({
 				country: $('#country').val(),

@@ -80,6 +80,7 @@ class AccountController extends Controller {
             $birthday_year = substr($birthday, 0, 4);
             $birthday_month = substr($birthday, 5, 2);
             $birthday_day = substr($birthday, 8, 2);
+
             $acct = \Stripe\Account::create(array(
                 'type' => 'custom',
                 'country' => $request->getParam('country'),
@@ -102,9 +103,16 @@ class AccountController extends Controller {
                         'state' => $request->getParam('state'),
                     ),
                 ),
+                'tos_acceptance' => array(
+                    'date' => time(),
+                    'ip' => $_SERVER['REMOTE_ADDR'],
+                ),
             ));
             //add to db
             User::where('username', $username)->update(array('stripe_acct_id' => $acct->id));
+            echo "<pre>";
+            var_dump($acct);
+            exit();
         } else {
             //if the user already has an account, add the bank token to their account
             $acct = \Stripe\Account::retrieve($acct->stripe_acct_id);
@@ -112,7 +120,7 @@ class AccountController extends Controller {
             $acct->external_accounts->create(array('external_account' => $request->getParam('bank-token')));
         }
 
-    	return $this->view->render($response, 'home.twig');
+    	//return $this->view->render($response, 'home.twig');
     }
 
 }
