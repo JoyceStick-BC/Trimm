@@ -88,38 +88,38 @@
       	</select>
       	<p>Last 4 of SSN</p>
       	<input type="text" name="ssn_last_4">
-		<h1>Bank Account Information</h1>
-		<select id="country">
-	        <option value="US">United States</option>
-	        <option value="CA">Canada</option>
-	        <option value="GB">United Kingdom</option>
-	        <option value="DE">Germany</option>
-	        <option value="FR">France</option>
-	        <option value="ES">Spain</option>
-		<select>
-		<p>Currency</p>
-		<select id="currency">
-	        <option value="USD">US Dollar</option>
-	        <option value="CAD">Canadian Dollar</option>
-	        <option value="GBP">Pound</option>
-	        <option value="EUR">Euro</option>
-      	</select>
-     	<p>Routing Number</p>
-      	<input type="text" id="routing-number" name="test">
-      	<p>Account Number</p>
-      	<input type="text" id="account-number">
-     	<p>Account Holder Name</p>
-     	<input type="text" id="account-name">
-     	<p>Account Holder Type</p>
-     	<select id="account-holder-type">
-      		<option value="individual">Individual</option>
-        	<option value="company">Company</option>
-      	</select>
-      	<p id="bank-errors"></p>
-      	{{ csrf.field | raw }}
       	<input type="text" name="bank-token" id="bank-token" style="display:none">
-      	<button>Submit</button>
-	</form>
+    </form>
+	<h1>Bank Account Information</h1>
+	<select id="country">
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="GB">United Kingdom</option>
+        <option value="DE">Germany</option>
+        <option value="FR">France</option>
+        <option value="ES">Spain</option>
+	<select>
+	<p>Currency</p>
+	<select id="currency">
+        <option value="USD">US Dollar</option>
+        <option value="CAD">Canadian Dollar</option>
+        <option value="GBP">Pound</option>
+        <option value="EUR">Euro</option>
+  	</select>
+ 	<p>Routing Number</p>
+  	<input type="text" id="routing-number" name="test">
+  	<p>Account Number</p>
+  	<input type="text" id="account-number">
+ 	<p>Account Holder Name</p>
+ 	<input type="text" id="account-name">
+ 	<p>Account Holder Type</p>
+ 	<select id="account-holder-type">
+  		<option value="individual">Individual</option>
+    	<option value="company">Company</option>
+  	</select>
+  	<p id="bank-errors"></p>
+  	{{ csrf.field | raw }}
+  	<button>Submit</button>
 	<script type="text/javascript">
 		Stripe.setPublishableKey( '{{ pub_key }}' );
 

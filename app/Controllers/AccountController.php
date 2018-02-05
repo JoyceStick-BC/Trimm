@@ -69,7 +69,6 @@ class AccountController extends Controller {
     }
 
     public function postBankInfo($request, $response) {
-        echo "<pre>";
         Stripe::setApiKey(getenv('STR_SEC'));
 
         $username = $this->auth->user()->username;
@@ -106,8 +105,6 @@ class AccountController extends Controller {
             ));
             //add to db
             User::where('username', $username)->update(array('stripe_acct_id' => $acct->id));
-
-            var_dump($acct);
         } else {
             //if the user already has an account, add the bank token to their account
             $acct = \Stripe\Account::retrieve($acct->stripe_acct_id);
@@ -115,7 +112,7 @@ class AccountController extends Controller {
             $acct->external_accounts->create(array('external_account' => $request->getParam('bank-token')));
         }
 
-    	//return $this->view->render($response, 'home.twig');
+    	return $this->view->render($response, 'home.twig');
     }
 
 }
