@@ -33,30 +33,37 @@ class AccountController extends Controller {
     	//update the user's payment key in the db
     	User::where('username', $username)->update(array('stripe_card_id' => $customer->id));
 
-		//LATER: query for customer id and create charge with:
-
-		/*	
-		\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
-
-		$charge = \Stripe\Charge::create(array(
-		  "amount" => 1500, // $15.00 this time
-		  "currency" => "usd",
-		  "customer" => $customer_id
-		));
-		*/
-
 		$this->flash->addMessage('success', 'Payment information saved successfully');
 		return $this->view->render($response, 'home.twig');
     }
 
-    public function postCharge($request, $response) {
-    	//get information about user (username/password/more?)
+    public function postCharge($request, $response, $args) {
+        \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
+        echo "<pre>";
+        var_dump(\Stripe\Account::retrieve('acct_1BsJltLnSe2JcOfh'));
+        /*$buyer = User::select('stripe_card_id')
+                       ->where('username', $args['buyerUsername'])
+                       ->first();
 
-    	/*$username = $request->getParam('username');
-    	$password = $request->getParam('password');
+        $seller = User::select('stripe_acct_id')
+                        ->where('username', $args['sellerUsername'])
+                        ->first();
 
-    	$id = User::select('stripe_id')->where('username', $username)->andWhere('password', $password)->get();
-    	var_dump($id);*/
+        $bundle_price = $args['price'];
+
+    	\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
+
+        $charge = \Stripe\Charge::create(array(
+          "amount" => $bundle_price,
+          "currency" => "usd",
+          "customer" => $buyer->stripe_card_id
+        ));
+
+        $payout = \Stripe\Payout::create(array(
+            "amount" => $bundle_price,
+            "currency" => "usd",
+        ), array("stripe_account" => $seller->stripe_acct_id));*/
+
     }
 
     public function getBankInfo($request, $response) {
@@ -110,9 +117,6 @@ class AccountController extends Controller {
             ));
             //add to db
             User::where('username', $username)->update(array('stripe_acct_id' => $acct->id));
-            echo "<pre>";
-            var_dump($acct);
-            exit();
         } else {
             //if the user already has an account, add the bank token to their account
             $acct = \Stripe\Account::retrieve($acct->stripe_acct_id);
@@ -120,7 +124,7 @@ class AccountController extends Controller {
             $acct->external_accounts->create(array('external_account' => $request->getParam('bank-token')));
         }
 
-    	//return $this->view->render($response, 'home.twig');
+    	return $this->view->render($response, 'home.twig');
     }
 
 }

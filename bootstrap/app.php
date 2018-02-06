@@ -108,6 +108,7 @@ $app->add(new \Carbon\Middleware\ValidationErrorsMiddleware($container));
 $app->add(new \Carbon\Middleware\OldInputMiddleware($container));
 $app->add(new \Carbon\Middleware\CsrfViewMiddleware($container));
 $app->add($container->csrf);
+$app->add(new \Carbon\Middleware\StripeMiddleware($container));
 
 v::with('Carbon\\Validation\\Rules');
 

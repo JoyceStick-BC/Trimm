@@ -14,7 +14,8 @@
 			'email',
 			'name',
 			'password',
-            'username'
+            'username',
+            'stripe_acct_id',
 		];
 
 		public function setPassword($password) {
