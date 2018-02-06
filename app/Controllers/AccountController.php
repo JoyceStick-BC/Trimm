@@ -40,8 +40,8 @@ class AccountController extends Controller {
     public function postCharge($request, $response, $args) {
         \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
         echo "<pre>";
-        var_dump(\Stripe\Account::retrieve('acct_1BsJltLnSe2JcOfh'));
-        /*$buyer = User::select('stripe_card_id')
+        //var_dump(\Stripe\Account::retrieve('acct_1BsJltLnSe2JcOfh'));
+        $buyer = User::select('stripe_card_id')
                        ->where('username', $args['buyerUsername'])
                        ->first();
 
@@ -54,16 +54,21 @@ class AccountController extends Controller {
     	\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
 
         $charge = \Stripe\Charge::create(array(
-          "amount" => $bundle_price,
-          "currency" => "usd",
-          "customer" => $buyer->stripe_card_id
+            'amount' => $bundle_price,
+            'currency' => 'usd',
+            'customer' => $buyer->stripe_card_id,
+            'destination' => array(
+                'account' => $seller->stripe_acct_id,
+            ),
         ));
 
-        $payout = \Stripe\Payout::create(array(
-            "amount" => $bundle_price,
-            "currency" => "usd",
-        ), array("stripe_account" => $seller->stripe_acct_id));*/
-
+        if ($charge->status == 'succeeded') {
+            $this->flash->addMessage('info', 'Bundle purchased successfully.');
+            return $response->withRedirect($this->router->pathFor('home'));
+        } else {
+            echo 'Unable to process payment:';
+            var_dump($charge->failure_message);
+        }
     }
 
     public function getBankInfo($request, $response) {

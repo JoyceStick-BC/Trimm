@@ -101,10 +101,5 @@ class BundleController extends Controller {
         $bundles = $bundles['hits']['hits'];
 
         return $response->withJson($bundles);
-
-        /*return $this->view->render($response, 'browse.twig', [
-            'query' => $request->getParam('query'),
-            'results' => $bundles,
-        ]);*/
     }
 }

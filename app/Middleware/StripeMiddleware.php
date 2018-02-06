@@ -5,10 +5,12 @@ namespace Carbon\Middleware;
 class StripeMiddleware extends Middleware {
 	public function __invoke($request, $response, $next) {
 		if ($this->check()) {
+			//if its been greater than 12 hours since a users last stripe warning, check if they have a stripe account
 			$acct = $this->container->auth->user()->stripe_acct_id;
 			\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
 			$acct = \Stripe\Account::retrieve($acct);
 			if ($acct) {
+				//if they have an account, check for possible errors with it
 				if ($acct->verification->disabled_reason) {
 					$this->container->flash->addMessage('error', 'Your account has been disabled from receiving payment. Click here for more information.');
 				} else if ($acct->verification->fields_needed) {
@@ -25,7 +27,7 @@ class StripeMiddleware extends Middleware {
 		if (!isset($_SESSION['stripe_check'])) {
 			$_SESSION['stripe_check'] = time();
 		}
-		return time() - $_SESSION['stripe_check'] > 86400;
+		return time() - $_SESSION['stripe_check'] > 43200;
 	}
 
 	public function set() {
