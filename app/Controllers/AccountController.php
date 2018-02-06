@@ -33,8 +33,8 @@ class AccountController extends Controller {
     	//update the user's payment key in the db
     	User::where('username', $username)->update(array('stripe_card_id' => $customer->id));
 
-		$this->flash->addMessage('success', 'Payment information saved successfully');
-		return $this->view->render($response, 'home.twig');
+		$this->flash->addMessage('info', 'Payment information saved successfully');
+		return $response->withRedirect($this->router->pathFor('home'));
     }
 
     public function postCharge($request, $response, $args) {
@@ -129,7 +129,13 @@ class AccountController extends Controller {
             $acct->external_accounts->create(array('external_account' => $request->getParam('bank-token')));
         }
 
-    	return $this->view->render($response, 'home.twig');
+        if ($acct->payouts_enabled) {
+            $this->flash->addMessage('info', 'Bank account added successfully, ready to recieve payouts.')
+            return $response->withRedirect($this->router->pathFor('home'));
+        } else {
+            echo "There was a problem with creating your account.";
+            var_dump($acct->verification->disabled_reason);
+        }
     }
 
 }
