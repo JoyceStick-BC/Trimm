@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 03, 2018 at 09:45 PM
+-- Generation Time: Feb 05, 2018 at 07:56 PM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 5.6.32
 
@@ -117,7 +117,7 @@ CREATE TABLE `users` (
   `username` varchar(500) NOT NULL,
   `password` varchar(1000) NOT NULL,
   `bio` text NOT NULL,
-  `img` varchar(64) NOT NULL,
+  `img` varchar(64) NOT NULL DEFAULT 'https://tinyurl.com/yctexzpl',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -127,8 +127,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `name`, `username`, `password`, `bio`, `img`, `created_at`, `updated_at`) VALUES
-(1, 'aliem@bc.edu', 'Emaad Ali', 'emaadali', '$2y$10$QtDAANODnzxIfseevnWEI.YdIgGERvuF17wAOJLGqVIf6zEdMY7b6', '', '', '2018-01-27 23:45:50', '2018-01-30 08:16:08'),
-(2, 'kyle@efds.com', 'earefdc', 'kyle', 'sdfgx', '', '', '2018-01-30 00:55:50', NULL),
+(1, 'aliem@bc.edu', 'Emaad Ali', 'emaadali', '$2y$10$QtDAANODnzxIfseevnWEI.YdIgGERvuF17wAOJLGqVIf6zEdMY7b6', '', 'https://tinyurl.com/yctexzpl', '2018-01-27 23:45:50', '2018-01-30 08:16:08'),
+(2, 'kyle@efds.com', 'earefdc', 'kyle', 'sdfgx', '', 'https://tinyurl.com/yctexzpl', '2018-01-30 00:55:50', NULL),
 (3, 'yangud@bc.edu', 'Ricky', 'ricky', '$2y$10$Z107nRsJcY5wDraclxFf1OERzDP7iO897jHx2Hvo6EGbWYn2mzouG', 'Hijkldfsjklsdfjlkfdsljkfdsjklfdsjks dfjsklf jsdlf jsdlkf jlsdkfj lskdj flksdjd ldsf f', 'https://avatars1.githubusercontent.com/u/30324472?s=460&v=4', '2018-01-31 23:13:47', '2018-01-31 23:13:47');
 
 --
@@ -186,7 +186,7 @@ ALTER TABLE `Software`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

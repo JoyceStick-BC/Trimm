@@ -3,6 +3,7 @@
 namespace Carbon\Controllers;
 use \Slim\Views\Twig as View;
 use Carbon\Models\Bundle;
+use Carbon\Models\User;
 
 class BundleController extends Controller {
     public function downloadBundle($request, $response, $args) {
@@ -68,8 +69,9 @@ class BundleController extends Controller {
     public function getBundle($request, $response, $args) {
         $username = $args["username"];
         $bundlename = $args["bundle"];
-        $bundle = Bundle::where('user', $username)->where('bundleName', $bundlename)->first();    
-        return $this->view->render($response, 'dashboard/bundles/bundle.twig',['bundles'=> $bundle]);
+        $bundle = Bundle::where('user', $username)->where('bundleName', $bundlename)->first();
+        $user = User::where('username', $username)->first();
+        return $this->view->render($response, 'dashboard/bundles/bundle.twig',['bundles'=> $bundle, 'user' => $user]);
 
     }
 }

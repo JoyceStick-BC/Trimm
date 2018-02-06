@@ -35,9 +35,8 @@ class DashboardController extends Controller {
             'userBundles' => $bundles,
             'profileUser' => $user, 
             'profileSocial' => $SocialMedia,
-            'profileSoftware'=>$Software
+            'profileSoftware' => $Software
         ]);
-        
     }
 
     public function getProfileStars($request, $response, $args){

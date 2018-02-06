@@ -168,16 +168,16 @@
     margin-top: 40px;
 }
 /* profile is the whole background. */
-/* background for userRepositories but not sidebar area in profile page. Layer above profile. */
+/* profileContentArea is background for userRepositories but not sidebar area in profile page. Layer above profile. */
 #profile, #profileContentArea{
     background-color: #f4f4f4;
 }
 #profileSidebar {
     width: 290px;
     float:left;
-    border-color: #ededed;
+    border-color: #f1f1f1;
     border-width: 2px;
-    border-style: groove;
+    border-style: solid;
     border-radius: 5px;
     background-color: #fcfcfc;
 
@@ -185,6 +185,7 @@
 #profileImage {
     width: 100%;
     border-radius: 5px;
+    border: 2px solid #d3d3d3;
     overflow: hidden;
 }
 
@@ -213,8 +214,6 @@
     text-align: center;
 
 }
-/* background for userRepositories but not sidebar area in profile page. Layer above profile. */
-
 
 #profileSidebar, #profileContentArea {
     display:inline-block;
@@ -256,25 +255,47 @@
     position: relative;
 }
 
-#bundleContainer{
+#bundleHeader{
     width: 65vw;
     margin:auto;
     background-color: #eee;
     max-width: 940px;
     margin-top: 40px;
 }
+
+#bundleContainer{
+    width: 65vw;
+    margin:auto;
+    background-color: white;
+    max-width: 940px;
+    margin-top: 40px;
+}
 #bundleOwner{
     font-weight: 700;
     text-transform: capitalize;
-    font-size: 25px;
+    font-size: 14px;
     margin-bottom: 15px;
     color:#24292e;
 }
+#bundlesPic{
+    width: 10%;
+    float: left;
+    margin: 5px;
+}
+#bundleOwnerPic{
+    border-radius: 50%;
+}
+#bundleVersion{
+    display:inline-block;
+    font-size: 10px;
+}
 
 #bundleName{
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 30px;
+    line-height: 24px;
     margin-top:5px;
+    margin-bottom: 5px;
+    display:inline-block;
 }
 
 .profileSidebarSection {
@@ -287,6 +308,10 @@
     border:none;
 }
 
+.bundlehead{
+    display: inline-block;
+    float: left;
+}
 
 .bundle {
     font-family: 'Open Sans', sans-serif;
