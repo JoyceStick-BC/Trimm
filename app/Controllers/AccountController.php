@@ -153,9 +153,11 @@ class AccountController extends Controller {
     }
 
     public function getBankHelp($request, $response) {
+        //get account
         $acct = $this->container->auth->user()->stripe_acct_id;
         \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
         $acct = \Stripe\Account::retrieve($acct);
+        //build array for twig
         $account_errors = array();
         if ($acct->verification->disabled_reason) {
             $account_errors['disabled_reason'] = $acct->verification->disabled_reason;
