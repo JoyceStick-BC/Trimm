@@ -4,6 +4,7 @@ namespace Carbon\Controllers;
 use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
+use Carbon\Models\Payment;
 use \Stripe\Stripe;
 
 class AccountController extends Controller {
@@ -38,21 +39,23 @@ class AccountController extends Controller {
     }
 
     public function postCharge($request, $response, $args) {
+        //get these variables some other way. right now is done with get
+        $buyerUsername = $args['buyerUsername'];
+        $sellerUsername = $args['sellerUsername'];
+        $bundle_price = $args['price'];
+        $bundleName = $args['bundleName'];
+
         \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
-        echo "<pre>";
-        //var_dump(\Stripe\Account::retrieve('acct_1BsJltLnSe2JcOfh'));
+        //grab buyer card id and seller account id
         $buyer = User::select('stripe_card_id')
-                       ->where('username', $args['buyerUsername'])
+                       ->where('username', $buyerUsername)
                        ->first();
 
         $seller = User::select('stripe_acct_id')
-                        ->where('username', $args['sellerUsername'])
+                        ->where('username', $sellerUsername)
                         ->first();
 
-        $bundle_price = $args['price'];
-
-    	\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
-
+        //create charge on buyer with destination to seller bank account
         $charge = \Stripe\Charge::create(array(
             'amount' => $bundle_price,
             'currency' => 'usd',
@@ -61,8 +64,16 @@ class AccountController extends Controller {
                 'account' => $seller->stripe_acct_id,
             ),
         ));
-
+    
         if ($charge->status == 'succeeded') {
+            //insert record into db
+            Payment::create(array(
+                'buyer_card_id' => $buyer->stripe_card_id,
+                'seller_acct_id' => $seller->stripe_acct_id,
+                'amount' => $bundle_price,
+                'bundleName' => $bundleName,
+            ));
+
             $this->flash->addMessage('info', 'Bundle purchased successfully.');
             return $response->withRedirect($this->router->pathFor('home'));
         } else {
@@ -130,7 +141,7 @@ class AccountController extends Controller {
         }
 
         if ($acct->payouts_enabled) {
-            $this->flash->addMessage('info', 'Bank account added successfully, ready to recieve payouts.')
+            $this->flash->addMessage('info', 'Bank account added successfully, ready to recieve payouts.');
             return $response->withRedirect($this->router->pathFor('home'));
         } else {
             echo "There was a problem with creating your account.";
