@@ -2,7 +2,8 @@
 {% block head %}
 {% endblock %}
 {% block content %}
-    <p>payment page</p>
+    <h1>Set card for bundle purchases</h1>
+   	<p>If you already have a card set with Trimm, filling out this form will overwrite that card.</p>
 	<script src="https://js.stripe.com/v3/"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<form action={{ path_for('account.postPayment')}} method="post" id="payment-form">

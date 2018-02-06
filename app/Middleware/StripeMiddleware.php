@@ -12,9 +12,9 @@ class StripeMiddleware extends Middleware {
 			if ($acct) {
 				//if they have an account, check for possible errors with it
 				if ($acct->verification->disabled_reason) {
-					$this->container->flash->addMessage('error', 'Your account has been disabled from receiving payment. Click here for more information.');
+					$this->container->flash->addMessage('error', 'Your account has been disabled from receiving payment. Click <a href="{{ path_for("account.help")}}">here</a> for more information.');
 				} else if ($acct->verification->fields_needed) {
-					$this->container->flash->addMessage('error', 'Your account needs more info. Click here for more information.');
+					$this->container->flash->addMessage('error', 'Your account needs more info. Click <a href="{{ path_for("account.help")}}">here</a> for more information.');
 				}
 			}
 			$this->set();

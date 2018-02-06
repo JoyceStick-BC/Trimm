@@ -86,8 +86,11 @@ class AccountController extends Controller {
     	//get form key for stripe
     	$publishable_key = getenv('STR_PUB');
 
+        $has_account = User::select('stripe_acct_id')->where('username', $this->auth->user()->username)->first();
+
     	return $this->view->render($response, 'dashboard/bankInfo.twig', [
     		'pub_key' => $publishable_key,
+            'has_account' => $has_account,
     	]);
     }
 
@@ -147,6 +150,21 @@ class AccountController extends Controller {
             echo "There was a problem with creating your account.";
             var_dump($acct->verification->disabled_reason);
         }
+    }
+
+    public function getBankHelp($request, $response) {
+        $acct = $this->container->auth->user()->stripe_acct_id;
+        \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
+        $acct = \Stripe\Account::retrieve($acct);
+        $account_errors = array();
+        if ($acct->verification->disabled_reason) {
+            $account_errors['disabled_reason'] = $acct->verification->disabled_reason;
+        } if ($acct->verification->fields_needed) {
+            $account_errors['fields_needed'] = $acct->verification->fields_needed;
+            $account_errors['due_by'] = $acct->verification->due_by;
+        }
+
+        return $this->view->render($response, 'dashboard/help.twig', $account_errors);
     }
 
 }

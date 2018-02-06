@@ -3,7 +3,10 @@
 	<h1>Bank Account Information:</h1>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<p>In order to receive payments, please fill out the form below.</p>
+	<p>In order to receive payments, please fill out the form below. </p>
+	{% if has_account %}
+		<p><b>NOTE: </b>You already have a bank account registered with Trimm. If you fill out this form, you will overwrite that account.</p>
+	{% endif %}
 	<form action="{{ path_for('account.postBankInfo') }}" method="post" id="bank-form">
 		<h1>Personal Information</h1>
 		<p>First Name</p>
