@@ -6,6 +6,7 @@ use Carbon\Models\User;
 use Carbon\Models\Bundle;
 use Carbon\Models\Payment;
 use \Stripe\Stripe;
+use \RandomLib\Factory;
 
 class AccountController extends Controller {
 	public function getPayment($request, $response) {
@@ -36,6 +37,13 @@ class AccountController extends Controller {
 
 		$this->flash->addMessage('info', 'Payment information saved successfully');
 		return $response->withRedirect($this->router->pathFor('home'));
+    }
+
+    public function getCharge($request, $response, $args) {
+        $factory = new Factory;
+        $generator = $factory->getMediumStrengthGenerator();
+        $key = $generator->generateString(6, '1234567890');
+        var_dump($key);
     }
 
     public function postCharge($request, $response, $args) {
