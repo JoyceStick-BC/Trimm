@@ -5,6 +5,7 @@ use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
 use Carbon\Models\Payment;
+use Carbon\Models\PublicKey;
 use \Stripe\Stripe;
 use \RandomLib\Factory;
 
@@ -44,6 +45,10 @@ class AccountController extends Controller {
         $generator = $factory->getMediumStrengthGenerator();
         $key = $generator->generateString(6, '1234567890');
         var_dump($key);
+        //add key to DB (hashed)
+        //send email to user with key
+        //in post charge, check if the user input is equal to the value in the DB
+        //only execute charge if they are
     }
 
     public function postCharge($request, $response, $args) {
