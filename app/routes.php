@@ -38,14 +38,14 @@ $app->group('', function () {
         $this->get('/bankInfo', 'AccountController:getBankInfo')->setName('account.getBankInfo');
         $this->post('/bankInfo', 'AccountController:postBankInfo')->setName('account.postBankInfo');
         $this->get('/help', 'AccountController:getBankHelp')->setName('account.help');
-        $this->get('/confirmCharge', 'AccountController:getCharge')->setName('account.confirmCharge');
+        $this->get('/confirmCharge/{user}/{bundleName}', 'AccountController:getCharge')->setName('account.confirmCharge');
     });
 
 })->add(new AuthMiddleware($container));
 
 $app->group('/api', function() {
     $this->get('/browse[/{query}]', 'BundleController:getBrowseWithQuery')->setName('bundles.getBrowse');
-    $this->get('/charge/{sellerUsername}/{buyerUsername}/{bundleName}/{price}', 'AccountController:postCharge');
+    $this->post('/charge', 'AccountController:postCharge')->setName('account.postCharge');
 });
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');

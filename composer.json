@@ -9,7 +9,8 @@
         "elasticsearch/elasticsearch": "^5.3",
         "vlucas/phpdotenv": "^2.4",
         "stripe/stripe-php": "^5.9",
-        "ircmaxell/random-lib": "^1.2"
+        "ircmaxell/random-lib": "^1.2",
+        "sendgrid/sendgrid": "^6.0"
     },
     "autoload": {
     	"psr-4": {

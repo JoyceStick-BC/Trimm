@@ -1,0 +1,13 @@
+{% extends 'templates/dashboard.twig' %}
+{% block content %}
+    <h1>Confirm Charge for {{ user }}/{{ bundleName }}</h1>
+	<p>Please enter the key sent to your email address to confirm:</p>
+	<form action="{{ path_for('account.postCharge') }}" method="post">
+		<input type="text" name="key">
+		<input type="text" name="bundleName" style="display:none" readonly="readonly" value="{{bundle}}">
+		{{ csrf.field | raw }}
+		<input type="text" name="sellerUsername" style="display:none" readonly="readonly" value="{{user}}">
+		<button>Confirm</button>
+	</form>
+{% endblock %}
+	

@@ -8,6 +8,9 @@ use Carbon\Models\Payment;
 use Carbon\Models\PublicKey;
 use \Stripe\Stripe;
 use \RandomLib\Factory;
+use \SendGrid\Email;
+use \SendGrid\Content;
+use \SendGrid\Mail;
 
 class AccountController extends Controller {
 	public function getPayment($request, $response) {
@@ -44,19 +47,67 @@ class AccountController extends Controller {
         $factory = new Factory;
         $generator = $factory->getMediumStrengthGenerator();
         $key = $generator->generateString(6, '1234567890');
+
+        $user = $this->auth->user();
+
+        PublicKey::create(array(
+            'user' => $user->username,
+            'privateKey' => md5($key),
+            'type' => 'charge',
+        ));
+
         var_dump($key);
-        //add key to DB (hashed)
-        //send email to user with key
-        //in post charge, check if the user input is equal to the value in the DB
-        //only execute charge if they are
+
+        //FIGURE OUT EMAIL LATER
+        /*$from = new Email($user->name, $user->email);
+        $subject = 'Charge code';
+        $to = new Email('Trimm', 'charges@trimm3d.com');
+        $content = new Content('text/plain', 'Your charge key is: '. $key);
+        $mail = new Mail($from, $subject, $to, $content);
+
+        $sg = new \SendGrid(getenv('SENDGRID_API_KEY'));
+
+        $response = $sg->client->mail()->send()->post($mail);
+
+        echo "<pre>";
+        var_dump($response);
+
+        echo $response->statusCode();
+        print_r($response->headers());
+        echo $response->body();*/
+
+        return $this->view->render($response, 'dashboard/confirmCharge.twig', [
+            'bundle' => $args['bundleName'],
+            'user' => $args['user'],
+        ]);
+
     }
 
-    public function postCharge($request, $response, $args) {
-        //get these variables some other way. right now is done with get
-        $buyerUsername = $args['buyerUsername'];
-        $sellerUsername = $args['sellerUsername'];
-        $bundle_price = $args['price'];
-        $bundleName = $args['bundleName'];
+    public function postCharge($request, $response) {
+        //check if the given key exists in the db
+        $buyerUsername = $this->auth->user()->username;
+        $key = PublicKey::select('privateKey')
+               ->where('user', $buyerUsername)
+               ->where('type', 'charge')
+               ->where('privateKey', md5($request->getParam('key')))
+               ->orderBy('id', 'desc')
+               ->first();
+
+        //if the keys do not match, exit
+        if (!md5($request->getParam('key')) == $key->privateKey) {
+            echo "Invalid Key";
+            exit();
+        }
+
+        //get the bundle price based on username and bundlename
+        $bundle_price = Bundle::select('price')
+                        ->where('user', $request->getParam('sellerUsername'))
+                        ->where('bundleName', $request->getParam('bundleName'))
+                        ->first();
+        $bundle_price = $bundle_price->price;
+        
+        $sellerUsername = $request->getParam('sellerUsername');
+        $bundleName = $request->getParam('bundleName');
 
         \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
         //grab buyer card id and seller account id
