@@ -10,13 +10,13 @@
 	<form action="{{ path_for('account.postBankInfo') }}" method="post" id="bank-form">
 		<h1>Personal Information</h1>
 		<p>First Name</p>
-		<input type="text" id="first-name" name="first-name">
+		<input type="text" id="first-name" name="first-name" alt="First Name">
 		<p>Last Name</p>
-		<input type="text" id="last-name" name="last-name">
+		<input type="text" id="last-name" name="last-name" alt="Last Name">
 		<p>Address Line 1</p>
-		<input type="text" id="address-line-1" name="address-line-1">
+		<input type="text" id="address-line-1" name="address-line-1" alt="Address Line 1">
 		<p>City</p>
-		<input type="text" id="address-city" name="address-city">
+		<input type="text" id="address-city" name="address-city" alt="City">
 		<p>State</p>
 		<select name="state">
 			<option value="AL">Alabama</option>
@@ -72,7 +72,7 @@
 			<option value="WY">Wyoming</option>
 		</select>
 		<p>Postal Code</p>
-		<input type="text" name="address-postal-code">
+		<input type="text" name="address-postal-code" alt="Postal Code">
 		<p>Country</p>
 		<select id="country" name="country">
 	        <option value="US">United States</option>
@@ -83,17 +83,18 @@
 	        <option value="ES">Spain</option>
 		<select>
 		<p>Date of Birth</p>
-		<input type="date" name="birthday">
+		<input type="date" name="birthday" alt="Date of Birth">
 		<p>Individual/Company</p>
 		<select id="legal-entity" name="legal-entity">
       		<option value="individual">Individual</option>
         	<option value="company">Company</option>
       	</select>
       	<p>Last 4 of SSN</p>
-      	<input type="text" name="ssn_last_4">
+      	<input type="text" name="ssn_last_4" alt="Social Security Number Last 4">
       	{{ csrf.field | raw }}
       	<input type="text" name="bank-token" id="bank-token" style="display:none">
     </form>
+    <p id="personal-info-errors"></p>
 	<h1>Bank Account Information</h1>
 	<select id="country">
         <option value="US">United States</option>
@@ -130,6 +131,17 @@
 		var form = document.getElementById('submit');
 		form.addEventListener('click', function(event) {
 			event.preventDefault();
+
+			var personal_errors = checkPersonalInput();
+			if (personal_errors.length > 0) {
+				personal_errors = personal_errors.join('');
+				console.log(personal_errors);
+				$('#personal-info-errors').html(
+					'<b>Missing the following fields:</b>' + 
+					personal_errors);
+				return;
+			}
+
 			Stripe.bankAccount.createToken({
 				country: $('#country').val(),
 				currency: $('#currency').val(),
@@ -145,6 +157,17 @@
 					$('#bank-form').submit();
 				}
 			});
-		})
+		});
+
+		function checkPersonalInput() {
+			var errors = [];
+			var elements = document.forms["bank-form"].getElementsByTagName("input");
+			for(var i = 0; i < elements.length; i++) {
+				if (elements[i].value == "") {
+					errors.push('<p>' + elements[i].alt + '</p>');
+				}
+			}
+			return errors;
+		}
 	</script>
 {% endblock %}
