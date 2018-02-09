@@ -1,6 +1,7 @@
 <?php
 
 namespace Carbon\Controllers\Auth;
+use Elasticsearch\ClientBuilder;
 
 use Carbon\Models\User;
 use Carbon\Controllers\Controller;
@@ -50,6 +51,21 @@ class AuthController extends Controller {
 			'username' => $request->getParam('username'),
 			'password' => password_hash($request->getParam('password'), PASSWORD_DEFAULT)
 		]);
+
+		//add user to elasticsearch server under the users index
+        $client = new ClientBuilder;
+        $client = $client->create()->build();
+
+        $params = [
+            'index' => 'users',
+            'type' => 'user',
+            'body' => [
+                'username' => $request->getParam('username'),
+                'name' => $request->getParam('name'),
+            ],
+        ];
+
+        $indexed = $client->index($params);
 
 		$this->flash->addMessage('info', 'You have been signed up!');
 

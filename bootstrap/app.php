@@ -99,6 +99,10 @@ $container['AccountController'] = function($container) {
 	return new \Carbon\Controllers\AccountController($container);
 };
 
+$container['SearchController'] = function($container) {
+	return new \Carbon\Controllers\SearchController($container);
+};
+
 $container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
 };

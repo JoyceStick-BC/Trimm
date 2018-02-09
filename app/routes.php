@@ -46,6 +46,7 @@ $app->group('', function () {
 $app->group('/api', function() {
     $this->get('/browse[/{query}]', 'BundleController:getBrowseWithQuery')->setName('bundles.getBrowse');
     $this->post('/charge', 'AccountController:postCharge')->setName('account.postCharge');
+    $this->get('/users/{query}', 'SearchController:getBrowseUsers')->setName('users.getBrowse');
 });
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');

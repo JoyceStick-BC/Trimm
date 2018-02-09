@@ -90,9 +90,9 @@
         	<option value="company">Company</option>
       	</select>
       	<p>Last 4 of SSN</p>
-      	<input type="text" name="ssn_last_4" alt="Social Security Number Last 4">
+      	<input type="text" name="ssn_last_4" alt="Social Security Number Last 4" maxlength="4">
       	{{ csrf.field | raw }}
-      	<input type="text" name="bank-token" id="bank-token" style="display:none">
+      	<input type="text" name="bank-token" id="bank-token" style="display:none" value="temp">
     </form>
     <p id="personal-info-errors"></p>
 	<h1>Bank Account Information</h1>
@@ -132,6 +132,8 @@
 		form.addEventListener('click', function(event) {
 			event.preventDefault();
 
+			//display any errors with the personal input section
+			//exit the function if there are any
 			var personal_errors = checkPersonalInput();
 			if (personal_errors.length > 0) {
 				personal_errors = personal_errors.join('');
@@ -142,6 +144,7 @@
 				return;
 			}
 
+			//create Stripe token and if successful, submit the form
 			Stripe.bankAccount.createToken({
 				country: $('#country').val(),
 				currency: $('#currency').val(),
@@ -160,6 +163,7 @@
 		});
 
 		function checkPersonalInput() {
+			//return an array of elements with no input
 			var errors = [];
 			var elements = document.forms["bank-form"].getElementsByTagName("input");
 			for(var i = 0; i < elements.length; i++) {
