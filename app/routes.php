@@ -24,7 +24,7 @@ $app->group('', function () {
     $this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
     $this->post('/auth/password/change', 'PasswordController:postChangePassword');
 
-    $this->get('/browse', 'BundleController:getBrowse')->setName('bundles.browse');
+    $this->get('/browse', 'SearchController:getBrowse')->setName('bundles.browse');
 
     $this->group('/dashboard', function () {
         $this->get('/profile[/{username}]', 'DashboardController:getProfile')->setName('dashboard.user.profile');
@@ -44,7 +44,7 @@ $app->group('', function () {
 })->add(new AuthMiddleware($container));
 
 $app->group('/api', function() {
-    $this->get('/browse[/{query}]', 'BundleController:getBrowseWithQuery')->setName('bundles.getBrowse');
+    $this->get('/browse[/{query}]', 'SearchController:getBrowseWithQuery')->setName('bundles.getBrowse');
     $this->post('/charge', 'AccountController:postCharge')->setName('account.postCharge');
     $this->get('/users/{query}', 'SearchController:getBrowseUsers')->setName('users.getBrowse');
 });
