@@ -38,7 +38,6 @@ class AccountController extends Controller {
 		));
     	
     	//update the user's payment key in the db
-    	//User::where('username', $username)->update(array('stripe_card_id' => $customer->id));
         StripeDB::updateOrCreate(
             ['user_id' => $this->auth->user()->id],
             ['card_id' => $customer->id]
@@ -116,13 +115,12 @@ class AccountController extends Controller {
         $bundle_price = $bundle_price->price;
         
         $seller_id = User::select('id')->where('username', $request->getParam('sellerUsername'))->first();
-        $buyer_id = User::select('id')->where('username', $request->getParam('buyerUsername'))->first();
         $bundleName = $request->getParam('bundleName');
 
         \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
         //grab buyer card id and seller account id
         $buyer = StripeDB::select('card_id')
-                       ->where('user_id', $buyer_id->id)
+                       ->where('user_id', $this->auth->user()->id)
                        ->first();
 
         $seller = StripeDB::select('acct_id')
@@ -142,8 +140,8 @@ class AccountController extends Controller {
         if ($charge->status == 'succeeded') {
             //insert record into db
             Payment::create(array(
-                'buyer_card_id' => $buyer->stripe_card_id,
-                'seller_acct_id' => $seller->stripe_acct_id,
+                'buyer_card_id' => $buyer->card_id,
+                'seller_acct_id' => $seller->acct_id,
                 'amount' => $bundle_price,
                 'bundleName' => $bundleName,
             ));
@@ -174,7 +172,6 @@ class AccountController extends Controller {
         Stripe::setApiKey(getenv('STR_SEC'));
 
         $username = $this->auth->user()->username;
-        $acct = User::select('stripe_acct_id')->where('username', $username)->first();
         $acct = StripeDB::select('acct_id')
                         ->where('user_id', $this->auth->user()->id)
                         ->first();
@@ -214,14 +211,13 @@ class AccountController extends Controller {
                 ),
             ));
             //add to db
-            User::where('username', $username)->update(array('stripe_acct_id' => $acct->id));
             StripeDB::updateOrCreate(
                 ['user_id' => $this->auth->user()->id],
                 ['acct_id' => $acct->id]
             );
         } else {
             //if the user already has an account, add the bank token to their account
-            $acct = \Stripe\Account::retrieve($acct->stripe_acct_id);
+            $acct = \Stripe\Account::retrieve($acct->acct_id);
             //this replaces the current account
             $acct->external_accounts->create(array('external_account' => $request->getParam('bank-token')));
         }
@@ -237,9 +233,11 @@ class AccountController extends Controller {
 
     public function getBankHelp($request, $response) {
         //get account
-        $acct = $this->container->auth->user()->stripe_acct_id;
+        $acct = StripeDB::select('acct_id')
+                        ->where('user_id', $this->auth->user()->id)
+                        ->first();
         \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
-        $acct = \Stripe\Account::retrieve($acct);
+        $acct = \Stripe\Account::retrieve($acct->acct_id);
         //build array for twig
         $account_errors = array();
         if ($acct->verification->disabled_reason) {
