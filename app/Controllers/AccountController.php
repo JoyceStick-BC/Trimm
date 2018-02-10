@@ -6,6 +6,7 @@ use Carbon\Models\User;
 use Carbon\Models\Bundle;
 use Carbon\Models\Payment;
 use Carbon\Models\PublicKey;
+use Carbon\Models\StripeDB;
 use \Stripe\Stripe;
 use \RandomLib\Factory;
 use \SendGrid\Email;
@@ -37,7 +38,11 @@ class AccountController extends Controller {
 		));
     	
     	//update the user's payment key in the db
-    	User::where('username', $username)->update(array('stripe_card_id' => $customer->id));
+    	//User::where('username', $username)->update(array('stripe_card_id' => $customer->id));
+        StripeDB::updateOrCreate(
+            ['user_id' => $this->auth->user()->id],
+            ['card_id' => $customer->id]
+        );
 
 		$this->flash->addMessage('info', 'Payment information saved successfully');
 		return $response->withRedirect($this->router->pathFor('home'));

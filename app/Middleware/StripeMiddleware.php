@@ -1,10 +1,13 @@
 <?php
 
 namespace Carbon\Middleware;
+use Carbon\Models\StripeDB;
 
 class StripeMiddleware extends Middleware {
 	public function __invoke($request, $response, $next) {
-		$acct = $this->container->auth->user()->stripe_acct_id;
+		$acct = StripeDB::select('acct_id')
+						->where('user_id', $this->container->auth->user()->id)
+						->first();
 		if ($acct) {
 			//if they have an account, check for possible errors with it
 			\Stripe\Stripe::setApiKey(getenv('STR_SEC'));
