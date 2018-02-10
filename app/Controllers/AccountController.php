@@ -115,26 +115,27 @@ class AccountController extends Controller {
                         ->first();
         $bundle_price = $bundle_price->price;
         
-        $sellerUsername = $request->getParam('sellerUsername');
+        $seller_id = User::select('id')->where('username', $request->getParam('sellerUsername'))->first();
+        $buyer_id = User::select('id')->where('username', $request->getParam('buyerUsername'))->first();
         $bundleName = $request->getParam('bundleName');
 
         \Stripe\Stripe::setApiKey(getenv('STR_SEC'));
         //grab buyer card id and seller account id
-        $buyer = User::select('stripe_card_id')
-                       ->where('username', $buyerUsername)
+        $buyer = StripeDB::select('card_id')
+                       ->where('user_id', $buyer_id->id)
                        ->first();
 
-        $seller = User::select('stripe_acct_id')
-                        ->where('username', $sellerUsername)
+        $seller = StripeDB::select('acct_id')
+                        ->where('user_id', $seller_id->id)
                         ->first();
 
         //create charge on buyer with destination to seller bank account
         $charge = \Stripe\Charge::create(array(
             'amount' => $bundle_price,
             'currency' => 'usd',
-            'customer' => $buyer->stripe_card_id,
+            'customer' => $buyer->card_id,
             'destination' => array(
-                'account' => $seller->stripe_acct_id,
+                'account' => $seller->acct_id,
             ),
         ));
     
@@ -159,11 +160,13 @@ class AccountController extends Controller {
     	//get form key for stripe
     	$publishable_key = getenv('STR_PUB');
 
-        $has_account = User::select('stripe_acct_id')->where('username', $this->auth->user()->username)->first();
+        $has_account = StripeDB::select('acct_id')
+                               ->where('user_id', $this->auth->user()->id)
+                               ->first();
 
     	return $this->view->render($response, 'dashboard/bankInfo.twig', [
     		'pub_key' => $publishable_key,
-            'has_account' => $has_account->stripe_acct_id,
+            'has_account' => $has_account->acct_id,
     	]);
     }
 
@@ -172,8 +175,11 @@ class AccountController extends Controller {
 
         $username = $this->auth->user()->username;
         $acct = User::select('stripe_acct_id')->where('username', $username)->first();
+        $acct = StripeDB::select('acct_id')
+                        ->where('user_id', $this->auth->user()->id)
+                        ->first();
 
-        if (!$acct->stripe_acct_id) {
+        if (!$acct->acct_id) {
             //if the user does not have a stripe custom account, make it
             $birthday = $request->getParam('birthday');
             $birthday_year = substr($birthday, 0, 4);
@@ -209,6 +215,10 @@ class AccountController extends Controller {
             ));
             //add to db
             User::where('username', $username)->update(array('stripe_acct_id' => $acct->id));
+            StripeDB::updateOrCreate(
+                ['user_id' => $this->auth->user()->id],
+                ['acct_id' => $acct->id]
+            );
         } else {
             //if the user already has an account, add the bank token to their account
             $acct = \Stripe\Account::retrieve($acct->stripe_acct_id);

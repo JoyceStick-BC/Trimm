@@ -103,15 +103,15 @@ $container['SearchController'] = function($container) {
 	return new \Carbon\Controllers\SearchController($container);
 };
 
-$container['csrf'] = function($container) {
+/*$container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
-};
+};*/
 
 //middle ware
 $app->add(new \Carbon\Middleware\ValidationErrorsMiddleware($container));
 $app->add(new \Carbon\Middleware\OldInputMiddleware($container));
-$app->add(new \Carbon\Middleware\CsrfViewMiddleware($container));
-$app->add($container->csrf);
+//$app->add(new \Carbon\Middleware\CsrfViewMiddleware($container));
+//$app->add($container->csrf);
 
 v::with('Carbon\\Validation\\Rules');
 
