@@ -54,6 +54,7 @@ class AccountController extends Controller {
             'user' => $user->username,
             'privateKey' => md5($key),
             'type' => 'charge',
+            'expiration' =>  date("Y-m-d H:i:s", time() + 3600),
         ));
 
         var_dump($key);
@@ -86,7 +87,7 @@ class AccountController extends Controller {
     public function postCharge($request, $response) {
         //check if the given key exists in the db
         $buyerUsername = $this->auth->user()->username;
-        $key = PublicKey::select('privateKey')
+        $key = PublicKey::select('privateKey', 'expiration')
                ->where('user', $buyerUsername)
                ->where('type', 'charge')
                ->where('privateKey', md5($request->getParam('key')))
@@ -96,6 +97,9 @@ class AccountController extends Controller {
         //if the keys do not match, exit
         if (!md5($request->getParam('key')) == $key->privateKey) {
             echo "Invalid Key";
+            exit();
+        } else if (strtotime($key->expiration) - time() > 3600) {
+            echo "This key has expired";
             exit();
         }
 
