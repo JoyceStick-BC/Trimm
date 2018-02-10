@@ -111,7 +111,6 @@ $container['csrf'] = function($container) {
 $app->add(new \Carbon\Middleware\ValidationErrorsMiddleware($container));
 $app->add(new \Carbon\Middleware\OldInputMiddleware($container));
 $app->add(new \Carbon\Middleware\CsrfViewMiddleware($container));
-$app->add(new \Carbon\Middleware\StripeMiddleware($container));
 $app->add($container->csrf);
 
 v::with('Carbon\\Validation\\Rules');

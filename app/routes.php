@@ -7,6 +7,7 @@ $app->get('/home', function ($request, $response) {
 
 use Carbon\Middleware\AuthMiddleware;
 use Carbon\Middleware\GuestMiddleware;
+use Carbon\Middleware\StripeMiddleware;
 
 $app->get('/', 'HomeController:index')->setName('home');
 
@@ -18,7 +19,7 @@ $app->group('', function () {
     $this->post('/auth/signin', 'AuthController:postSignIn');
 })->add(new GuestMiddleware($container));
 
-$app->group('', function () {
+$app->group('', function () use ($container) {
     $this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
 
     $this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
@@ -39,7 +40,7 @@ $app->group('', function () {
         $this->post('/bankInfo', 'AccountController:postBankInfo')->setName('account.postBankInfo');
         $this->get('/help', 'AccountController:getBankHelp')->setName('account.help');
         $this->get('/confirmCharge/{user}/{bundleName}', 'AccountController:getCharge')->setName('account.confirmCharge');
-    });
+    })->add(new StripeMiddleware($container));
 
 })->add(new AuthMiddleware($container));
 

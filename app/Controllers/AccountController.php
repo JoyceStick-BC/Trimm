@@ -154,7 +154,7 @@ class AccountController extends Controller {
 
     	return $this->view->render($response, 'dashboard/bankInfo.twig', [
     		'pub_key' => $publishable_key,
-            'has_account' => $has_account,
+            'has_account' => $has_account->stripe_acct_id,
     	]);
     }
 
