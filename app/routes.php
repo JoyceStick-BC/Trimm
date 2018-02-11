@@ -52,5 +52,6 @@ $app->group('/api', function() {
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');
 $app->get('/payment/authorization-request/{bundleHash}/{username}', 'BundleController:sendEmail');
+$app->get('/payment/authorization-request/{bundleHash}/{username}/{code}', 'BundleController:downloadPaid');
 
 $app->get('/latest/{username}/{bundlename}', 'BundleController:getLatestVersion')->setName('bundle.latestVersion');

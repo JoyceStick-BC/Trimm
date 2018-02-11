@@ -5,10 +5,13 @@ use \Slim\Views\Twig as View;
 use Carbon\Models\Bundle;
 use Carbon\Models\User;
 use Carbon\Models\PublicKey;
+use Carbon\Models\Payment;
 use \SendGrid\Email;
 use \SendGrid\Content;
 use \SendGrid\Mail;
 use \RandomLib\Factory;
+use \Stripe\Stripe;
+use Carbon\Models\StripeDB;
 
 class BundleController extends Controller {
     public function downloadBundle($request, $response, $args) {
@@ -125,6 +128,80 @@ class BundleController extends Controller {
         ];
 
         return $response->withJson($json);
+
+    }
+
+    public function downloadPaid($request, $response, $args) {
+        //try to grab the key from db
+        $key = PublicKey::select('privateKey', 'expiration')
+                        ->where('user', $args['username'])
+                        ->where('type', 'charge')
+                        ->where('privateKey', md5($request->getParam('key')))
+                        ->orderBy('id', 'desc')
+                        ->first();
+
+        //check if the key is valid
+        if (!$key) {
+            $json = [
+                'message' => 'This key does not exist',
+            ];
+            return $response->withJson($json);
+        } else if (!md5($request->getParam('code')) == $key->privateKey) {
+            $json = [
+                'message' => 'This key is incorrect',
+            ];
+            return $response->withJson($json);
+        } else if (strtotime($key->expiration) - time() > 3600) {
+            $json = [
+                'message' => 'This key has expired',
+            ];
+            return $response->withJson($json);
+        }
+
+        //get the bundle and seller through the provided hash
+        $bundle = Bundle::where('hash', $args['bundleHash'])->first();
+        $bundlePrice = $bundle->price;
+        $seller = User::where('username', $bundle->user)->first()->id;
+        $sellerStripeBank = StripeDB::where('user_id', $seller)->first()->acct_id;
+        //get buyer through the username
+        $buyer = User::where('username', $args['username'])->first()->id;
+        $buyerStripeCard = StripeDB::where('user_id', $buyer)->first()->card_id;
+
+        //make charge
+        Stripe::setApiKey(getenv('STR_SEC'));
+        $charge = \Stripe\Charge::create(array(
+            'amount' => $bundlePrice,
+            'currency' => 'usd',
+            'customer' => $buyerStripeCard,
+            'destination' => array(
+                'account' => $sellerStripeBank,
+            ),
+        ));
+
+        //make payment record
+        if ($charge->status == 'succeeded') {
+            Payment::create(array(
+                'buyer_card_id' => $buyerStripeCard,
+                'seller_acct_id' => $sellerStripeBank,
+                'amount' => $bundlePrice,
+                'bundleName' => $bundle->bundleName,
+            ));
+
+            //download the bundle
+            /*
+            $file = 'localhost/snatch/public/img.zip';
+            $zip = $bundle->hash . ".zip";
+            $path = $request->getUri()->getBasePath() . "/bundles/{$zip}";
+            echo $path;
+            return $response->withRedirect($path);
+            */
+        } else {
+            $json = [
+                'message' => 'Unable to process payment',
+            ];
+            return $response->withJson($json);
+        }
+
 
     }
 }
