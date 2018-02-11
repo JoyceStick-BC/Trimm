@@ -3,7 +3,12 @@
 namespace Carbon\Controllers;
 use \Slim\Views\Twig as View;
 use Carbon\Models\Bundle;
-use Elasticsearch\ClientBuilder;
+use Carbon\Models\User;
+use Carbon\Models\PublicKey;
+use \SendGrid\Email;
+use \SendGrid\Content;
+use \SendGrid\Mail;
+use \RandomLib\Factory;
 
 class BundleController extends Controller {
     public function downloadBundle($request, $response, $args) {
@@ -81,6 +86,45 @@ class BundleController extends Controller {
     }
 
     public function sendEmail($request, $response, $args) {
+        $factory = new Factory;
+        $generator = $factory->getMediumStrengthGenerator();
+        $key = $generator->generateString(6, '1234567890');
+
+        $user = User::where('username', $args['username'])->first();
+
+        PublicKey::create(array(
+            'user' => $user->username,
+            'privateKey' => md5($key),
+            'type' => 'charge',
+            'expiration' =>  date("Y-m-d H:i:s", time() + 3600),
+        ));
+
+        //FIGURE OUT EMAIL LATER
+        /*$from = new Email($user->name, $user->email);
+        $subject = 'Charge code';
+        $to = new Email('Trimm', 'charges@trimm3d.com');
+        $content = new Content('text/plain', 'Your charge key is: '. $key);
+        $mail = new Mail($from, $subject, $to, $content);
+
+        $sg = new \SendGrid(getenv('SENDGRID_API_KEY'));
+
+        $response = $sg->client->mail()->send()->post($mail);
+
+        echo "<pre>";
+        var_dump($response);
+
+        echo $response->statusCode();
+        print_r($response->headers());
+        echo $response->body();*/
+
+        $json = [
+            'success' => 'true',
+            'hash' => $args['bundleHash'],
+            'username' => $args['username'],
+            'message' => 'Please input the code sent to your email address to confirm payment.',
+        ];
+
+        return $response->withJson($json);
 
     }
 }
