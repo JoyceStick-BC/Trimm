@@ -36,7 +36,7 @@ class AccountController extends Controller {
 		  "email" => $email,
 		  "source" => $token,
 		));
-    	
+
     	//update the user's payment key in the db
         StripeDB::updateOrCreate(
             ['user_id' => $this->auth->user()->id],
@@ -113,7 +113,7 @@ class AccountController extends Controller {
                         ->where('bundleName', $request->getParam('bundleName'))
                         ->first();
         $bundle_price = $bundle_price->price;
-        
+
         $seller_id = User::select('id')->where('username', $request->getParam('sellerUsername'))->first();
         $bundleName = $request->getParam('bundleName');
 
@@ -136,7 +136,7 @@ class AccountController extends Controller {
                 'account' => $seller->acct_id,
             ),
         ));
-    
+
         if ($charge->status == 'succeeded') {
             //insert record into db
             Payment::create(array(

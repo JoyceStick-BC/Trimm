@@ -33,12 +33,24 @@ class BundleController extends Controller {
                 );
             }
         } else {
-                //A bundle was found. grab the hash and stream the download.
+            //A bundle was found. if it is paid, respond with json else respond with download.
+            if ($bundle->price) {
+                $json = [
+                    'bundleName' => $args['bundlename'],
+                    'user' => $args['username'],
+                    'price' => $bundle->price,
+                    'hash' => $bundle->hash,
+                    'message' => "This bundle costs $bundle->price. Would you like to purchase it?(y/n)"
+                ];
+
+                return $response->withJson($json);
+            } else {
                 $file = 'localhost/snatch/public/img.zip';
                 $zip = $bundle->hash . ".zip";
                 $path = $request->getUri()->getBasePath() . "/bundles/{$zip}";
                 echo $path;
                 return $response->withRedirect($path);
+            }
         }
     }
 
@@ -66,5 +78,9 @@ class BundleController extends Controller {
 
         echo json_encode($response, JSON_PRETTY_PRINT);
         exit();
+    }
+
+    public function sendEmail($request, $response, $args) {
+
     }
 }
