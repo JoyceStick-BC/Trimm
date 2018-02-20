@@ -35,9 +35,16 @@ class DashboardController extends Controller {
     }
 
     public function postUpload($request, $response) {
+        var_dump($request->getParams());
         $fileName = $_FILES["fileToUpload"]["name"];
         $name = explode('.', $fileName)[0];
-        $username = $this->container->auth->user()->username;
+        if ($request->getParam('username') != null) {
+            $username = $request->getParam('username');
+            $desktop = true;
+        } else {
+            $username = $this->container->auth->user()->username;
+        }
+
 
         $identifier = time() . $username . $name;
 
@@ -90,6 +97,12 @@ class DashboardController extends Controller {
 
         $indexed = $client->index($params);
 
+        if ($desktop) {
+            $json = [
+                'success' => true,
+            ];
+            return $response->withJson($json);
+        }
         return $response->withRedirect($this->router->pathFor('dashboard.user.uploadasset'));
     }
 }
