@@ -26,7 +26,7 @@ $app->group('', function () {
 
     $this->get('/browse', 'BundleController:getBrowse')->setName('bundles.browse');
 
-    $app->group('/dashboard', function () {
+    $this->group('/dashboard', function () {
         $this->get('/profile[/{username}]', 'DashboardController:getProfile')->setName('dashboard.user.profile');
         $this->get('/upload', 'DashboardController:getUpload')->setName('dashboard.user.uploadasset');
         $this->post('/upload', 'DashboardController:postUpload');
