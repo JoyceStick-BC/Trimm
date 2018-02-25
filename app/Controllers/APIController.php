@@ -3,6 +3,7 @@
 namespace Carbon\Controllers;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
+use Elasticsearch\ClientBuilder;
 
 class APIController extends Controller {
     public function postUpload($request, $response) {

@@ -93,6 +93,10 @@ $container['DashboardController'] = function ($container) {
     return new \Carbon\Controllers\DashboardController($container);
 };
 
+$container['APIController'] = function ($container) {
+	return new \Carbon\Controllers\APIController($container);
+};
+
 /*$container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
 };*/
