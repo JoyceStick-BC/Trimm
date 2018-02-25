@@ -1,43 +1,14 @@
 <?php
 
 namespace Carbon\Controllers;
-use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
-use Elasticsearch\ClientBuilder;
 
-class DashboardController extends Controller {
-    public function getProfile($request, $response, $args) {
-        if (isset($args['username'])) {
-            $username = $args["username"];
-        } else {
-            $username = $this->auth->user()->username;
-        }
-        $user = User::where('username', $username)->first();
-
-        if(!$user) {
-            //404
-            echo "user not found";
-            exit();
-        }
-
-        $bundles = Bundle::where('user', $username)->get();
-
-        return $this->view->render($response, 'dashboard/user/profile.twig', [
-            'userBundles' => $bundles,
-            'user' => $user
-        ]);
-
-    }
-
-    public function getUpload($request, $response) {
-        return $this->view->render($response, 'dashboard/user/upload.twig');
-    }
-
+class APIController extends Controller {
     public function postUpload($request, $response) {
         $fileName = $_FILES["fileToUpload"]["name"];
         $name = explode('.', $fileName)[0];
-        $username = $this->container->auth->user()->username;
+        $username = $request->getParam('username');
 
         $identifier = time() . $username . $name;
 
@@ -90,6 +61,10 @@ class DashboardController extends Controller {
 
         $indexed = $client->index($params);
 
-        return $response->withRedirect($this->router->pathFor('dashboard.user.uploadasset'));
+        return $response->withJson([
+            'success' => true,
+        ]);
     }
 }
+
+ ?>
