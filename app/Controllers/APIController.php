@@ -3,6 +3,7 @@
 namespace Carbon\Controllers;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
+use Carbon\Models\PublicKey;
 use Elasticsearch\ClientBuilder;
 
 class APIController extends Controller {
@@ -76,7 +77,10 @@ class APIController extends Controller {
         if (!$user) {
             $data = [
                 'success' => false,
+                'message' => 'User with that email does not exist',
             ];
+
+            return $response->withJson($data);
         }
 
         if (password_verify($password, $user->password)) {
@@ -86,11 +90,47 @@ class APIController extends Controller {
                 'success' => true,
                 'key' => $key,
             ];
+
+            $user->update([
+                'exchangeCode' => $key,
+            ]);
         } else {
             $data = [
                 'success' => false,
+                'message' => 'Password did not match',
             ];
         }
+
+        return $response->withJson($data);
+    }
+
+    public function postAuthCode($request, $response) {
+        $code = $request->getParam('code');
+        $userFirstFour = $request->getParam('userFirstFour');
+
+        $user = User::where('exchangeCode', $code)->first();
+
+        if (!$user) {
+            $data = [
+                'success' => false,
+                'message' => 'Exchange code did not match',
+            ];
+
+            return $response->withJson($data);
+        }
+
+        $key = md5($userFirstFour . $code);
+
+        PublicKey::create([
+            'user' => $user->username,
+            'expiration' => null,
+            'privateKey' => $key,
+        ]);
+
+        $data = [
+            'success' => true,
+            'key' => $key,
+        ];
 
         return $response->withJson($data);
     }
