@@ -66,6 +66,20 @@ class APIController extends Controller {
             'success' => true,
         ]);
     }
+
+    public function postAuth($request, $response) {
+        $username = $request->getParam('username');
+        $password = $request->getParam('password');
+
+        $user = User::where('username', $username)->where('password', $password)->first();
+
+        $params = [
+            'success' => true,
+            'key' => 'fal;ksdjfklasj',
+        ];
+
+        return $response->withJson($params);
+    }
 }
 
  ?>

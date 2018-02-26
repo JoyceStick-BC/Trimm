@@ -37,6 +37,7 @@ $app->group('', function () {
 $app->group('/api', function() {
     $this->get('/browse[/{query}]', 'BundleController:getBrowseWithQuery')->setName('bundles.getBrowse');
     $this->post('/upload-asset', 'APIController:postUpload');
+    $this->post('/auth', 'APIController:postAuth');
 });
 
 $app->get('/bundle/{username}/{bundlename}', 'BundleController:downloadBundle')->setName('bundle.downloadzip');
