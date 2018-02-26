@@ -68,17 +68,31 @@ class APIController extends Controller {
     }
 
     public function postAuth($request, $response) {
-        $username = $request->getParam('username');
+        $email = $request->getParam('username');
         $password = $request->getParam('password');
 
-        $user = User::where('username', $username)->where('password', $password)->first();
+        $user = User::where('email', $email)->first();
 
-        $params = [
-            'success' => true,
-            'key' => 'fal;ksdjfklasj',
-        ];
+        if (!$user) {
+            $data = [
+                'success' => false,
+            ];
+        }
 
-        return $response->withJson($params);
+        if (password_verify($password, $user->password)) {
+            $key = md5($email . $password . time());
+
+            $data = [
+                'success' => true,
+                'key' => $key,
+            ];
+        } else {
+            $data = [
+                'success' => false,
+            ];
+        }
+
+        return $response->withJson($data);
     }
 }
 
