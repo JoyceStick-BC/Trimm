@@ -4,6 +4,7 @@ namespace Carbon\Controllers;
 use \Slim\Views\Twig as View;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
+use Carbon\Models\BundleComponent;
 use Elasticsearch\ClientBuilder;
 
 class DashboardController extends Controller {
@@ -41,7 +42,7 @@ class DashboardController extends Controller {
 
         $identifier = time() . $username . $name;
 
-        $target_file = "/var/www/trimm3d.com/public_html/public/bundles/temp/asset/". $identifier . '.zip';
+        $target_file = "C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\asset\\". $identifier . '.zip';
         move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
         $infoJson = [
@@ -51,19 +52,11 @@ class DashboardController extends Controller {
             "name" => $name,
             "bundlename" => $username . "/" .$name
         ];
-        $jsonFile = fopen("/var/www/trimm3d.com/public_html/public/bundles/temp/json/{$identifier}.txt", "w");
+        $jsonFile = fopen("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\json\\{$identifier}.txt", "w");
         fwrite($jsonFile, json_encode($infoJson));
         fclose($jsonFile);
 
         $hash = md5($identifier);
-
-        $zip = new \ZipArchive();
-        if ($zip->open("/var/www/trimm3d.com/public_html/public/bundles/{$hash}.zip", \ZipArchive::CREATE) === TRUE)
-        {
-            $zip->addFile("/var/www/trimm3d.com/public_html/public/bundles/temp/json/{$identifier}.txt", "info.json");
-            $zip->addFile("/var/www/trimm3d.com/public_html/public/bundles/temp/asset/". $identifier . '.zip', "{$name}.zip");
-            $zip->close();
-        }
 
         $bundle = Bundle::create([
             'user' => $username,
@@ -72,6 +65,58 @@ class DashboardController extends Controller {
             'version' => "1",
             'description' => $request->getParam('description'),
         ]);
+
+        $zip = new \ZipArchive();
+        $uploadedZip = new \ZipArchive();
+        $uploadedZip->open($target_file);
+        if ($zip->open("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\{$hash}.zip", \ZipArchive::CREATE) === TRUE)
+        {
+            echo "C:\\xampp\\htdocs\\Trimm\\public\\bundles\\{$hash}.zip";
+            $zipOpen = zip_open("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\asset\\". $identifier . '.zip'); 
+            echo "<pre>";
+
+            $files = array();
+
+            while ($zip_entry = zip_read($zipOpen)) {
+                $filePathElements= array_filter(explode('/', zip_entry_name($zip_entry)));
+                foreach($filePathElements as $filePathElement){
+                    if ($filePathElement == '__MACOSX' || $filePathElement == '.DS_Store'){
+                        continue 2;
+                    }
+                }
+                if(count($filePathElements) <= 1){
+                    $destination = '';
+                }
+                else{
+                    $destination = array_slice($filePathElements, 0, count($filePathElements)-1);
+                    $destination = implode('/', $destination).'/';
+                }
+
+                $metaFilename = $filePathElements[count($filePathElements)-1].'.meta';
+                $guid = $this->getGUID();
+                $files[]= [
+                    'hash'=>$guid, 
+                    'bundle_id'=>$bundle->id,
+                    'path'=>$destination,
+                    'name'=>$metaFilename
+                ];
+
+                $bundleComponent = BundleComponent::create([
+                    'hash'=>$guid, 
+                    'bundle_id'=>$bundle->id,
+                    'path'=>$destination,
+                    'name'=>$metaFilename
+                ]);
+
+                $uploadedZip->addFromString($destination.$metaFilename, "fileFormatVersion: 2\nguid: ".$guid);
+                echo $destination.'<br>';
+            }
+            zip_close($zipOpen);
+            $uploadedZip->close();
+            $zip->addFile("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\json\\{$identifier}.txt", "info.json");
+            $zip->addFile("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\asset\\". $identifier . '.zip', "{$name}.zip");
+            $zip->close();
+        }
 
         //add file to elasticsearch server
         $client = new ClientBuilder;
@@ -91,5 +136,15 @@ class DashboardController extends Controller {
         $indexed = $client->index($params);
 
         return $response->withRedirect($this->router->pathFor('dashboard.user.uploadasset'));
+    }
+    public function getGUID(){
+       mt_srand((double)microtime()*10000);//optional for php 4.2.0 and up.
+       $charid = strtoupper(md5(uniqid(rand(), true)));
+       $uuid = substr($charid, 0, 8)
+           .substr($charid, 8, 4)
+           .substr($charid,12, 4)
+           .substr($charid,16, 4)
+           .substr($charid,20,12);
+       return $uuid;
     }
 }
