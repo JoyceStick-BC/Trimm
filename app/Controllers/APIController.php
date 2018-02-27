@@ -110,6 +110,10 @@ class APIController extends Controller {
 
         $user = User::where('exchangeCode', $code)->first();
 
+        $user->update([
+            'exchangeCode' => null,
+        ]);
+
         if (!$user) {
             $data = [
                 'success' => false,
@@ -125,11 +129,12 @@ class APIController extends Controller {
             'user' => $user->username,
             'expiration' => null,
             'privateKey' => $key,
+            'type' => 'desktop',
         ]);
 
         $data = [
             'success' => true,
-            'key' => $key,
+            'final_key' => $key,
         ];
 
         return $response->withJson($data);
