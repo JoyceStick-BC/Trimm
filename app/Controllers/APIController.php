@@ -126,7 +126,7 @@ class APIController extends Controller {
         $key = md5($userFirstFour . $code);
 
         PublicKey::create([
-            'user' => $user->username,
+            'user_id' => $user->id,
             'expiration' => null,
             'privateKey' => $key,
             'type' => 'desktop',
@@ -135,6 +135,29 @@ class APIController extends Controller {
         $data = [
             'success' => true,
             'final_key' => $key,
+        ];
+
+        return $response->withJson($data);
+    }
+
+    public function checkAuth($request, $response) {
+        $code = $request->getParam('code');
+        $email = $request->getParam('email');
+
+        $user = User::where('email', $email)->first();
+
+        $key = PublicKey::where('privateKey', $code)->where('user_id', $user->id)->first();
+
+        if ($key) {
+            $data = [
+                'success' => true,
+            ];
+
+            return $response->withJson($data);
+        }
+
+        $data = [
+            'success' => false,
         ];
 
         return $response->withJson($data);

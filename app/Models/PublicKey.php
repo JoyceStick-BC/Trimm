@@ -7,7 +7,7 @@ class PublicKey extends Model {
     protected $table = 'publicKeys';
     //define which columns can be written to
     protected $fillable = [
-        'user',
+        'user_id',
         'privateKey',
         'type',
         'expiration',

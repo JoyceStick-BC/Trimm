@@ -15,7 +15,8 @@
 			'name',
 			'password',
             'username',
-			'exchangeCode'
+			'exchangeCode',
+			'id',
 		];
 
 		public function setPassword($password) {
