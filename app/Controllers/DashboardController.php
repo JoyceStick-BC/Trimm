@@ -42,7 +42,7 @@ class DashboardController extends Controller {
 
         $identifier = time() . $username . $name;
 
-        $target_file = "C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\asset\\". $identifier . '.zip';
+        $target_file = getenv('PUBLIC_PATH')."bundles/temp/asset/". $identifier . '.zip';
         move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
         $infoJson = [
@@ -52,7 +52,7 @@ class DashboardController extends Controller {
             "name" => $name,
             "bundlename" => $username . "/" .$name
         ];
-        $jsonFile = fopen("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\json\\{$identifier}.txt", "w");
+        $jsonFile = fopen(getenv('PUBLIC_PATH')."bundles/temp/json/{$identifier}.txt", "w");
         fwrite($jsonFile, json_encode($infoJson));
         fclose($jsonFile);
 
@@ -69,10 +69,10 @@ class DashboardController extends Controller {
         $zip = new \ZipArchive();
         $uploadedZip = new \ZipArchive();
         $uploadedZip->open($target_file);
-        if ($zip->open("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\{$hash}.zip", \ZipArchive::CREATE) === TRUE)
+        if ($zip->open(getenv('PUBLIC_PATH')."bundles/{$hash}.zip", \ZipArchive::CREATE) === TRUE)
         {
-            echo "C:\\xampp\\htdocs\\Trimm\\public\\bundles\\{$hash}.zip";
-            $zipOpen = zip_open("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\asset\\". $identifier . '.zip'); 
+            echo getenv('PUBLIC_PATH')."bundles/{$hash}.zip";
+            $zipOpen = zip_open(getenv('PUBLIC_PATH')."bundles/temp/asset/". $identifier . '.zip'); 
             echo "<pre>";
 
             $files = array();
@@ -113,8 +113,8 @@ class DashboardController extends Controller {
             }
             zip_close($zipOpen);
             $uploadedZip->close();
-            $zip->addFile("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\json\\{$identifier}.txt", "info.json");
-            $zip->addFile("C:\\xampp\\htdocs\\Trimm\\public\\bundles\\temp\\asset\\". $identifier . '.zip', "{$name}.zip");
+            $zip->addFile(getenv('PUBLIC_PATH')."bundles/temp/json/{$identifier}.txt", "info.json");
+            $zip->addFile(getenv('PUBLIC_PATH')."bundles/temp/asset/". $identifier . '.zip', "{$name}.zip");
             $zip->close();
         }
 
