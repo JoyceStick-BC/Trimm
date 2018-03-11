@@ -31,11 +31,15 @@ $app->group('', function () {
         $this->get('/upload', 'DashboardController:getUpload')->setName('dashboard.user.uploadasset');
         $this->post('/upload', 'DashboardController:postUpload');
     });
+
 })->add(new AuthMiddleware($container));
 
 $app->group('/api', function() {
     $this->get('/browse[/{query}]', 'BundleController:getBrowseWithQuery')->setName('bundles.getBrowse');
+    $this->post('/upload-asset', 'APIController:postUpload');
 });
+
+$app->get('/bundle/{username}/{bundlename}', 'BundleController:downloadBundle')->setName('bundle.downloadzip');
 
 $app->get('/download/{username}/{bundlename}[/{version}]', 'BundleController:downloadBundle')->setName('bundle.download');
 

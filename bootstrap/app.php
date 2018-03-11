@@ -93,15 +93,19 @@ $container['DashboardController'] = function ($container) {
     return new \Carbon\Controllers\DashboardController($container);
 };
 
-$container['csrf'] = function($container) {
-	return new \Slim\Csrf\Guard;
+$container['APIController'] = function ($container) {
+	return new \Carbon\Controllers\APIController($container);
 };
+
+/*$container['csrf'] = function($container) {
+	return new \Slim\Csrf\Guard;
+};*/
 
 //middle ware
 $app->add(new \Carbon\Middleware\ValidationErrorsMiddleware($container));
 $app->add(new \Carbon\Middleware\OldInputMiddleware($container));
-$app->add(new \Carbon\Middleware\CsrfViewMiddleware($container));
-$app->add($container->csrf);
+//$app->add(new \Carbon\Middleware\CsrfViewMiddleware($container));
+//$app->add($container->csrf);
 
 v::with('Carbon\\Validation\\Rules');
 
