@@ -14,7 +14,7 @@ class DashboardController extends Controller {
             $username = $this->auth->user()->username;
         }
         $user = User::where('username', $username)->first();
-        
+
         if(!$user) {
             //404
             echo "user not found";
@@ -27,7 +27,7 @@ class DashboardController extends Controller {
             'userBundles' => $bundles,
             'user' => $user
         ]);
-        
+
     }
 
     public function getUpload($request, $response) {
