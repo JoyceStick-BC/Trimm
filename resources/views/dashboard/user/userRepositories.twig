@@ -1,0 +1,15 @@
+{% extends 'templates/userProfile.twig' %}
+
+{% block profilecontent %}
+<div id="profileContentArea">
+	{% for bundle in userBundles %}
+		<div class="bundle">
+			<a class='bundleselector' {#href="{{ path_for('bundle.page', {'username': bundle.user, 'bundlename': bundle.bundleName}) }}"#}>
+			<div class="bundleName">{{ bundle.bundleName }}</div>
+			<div class="bundleDesc">{{ bundle.descr }}</div>
+			<div class="bundleVersion">Version {{ bundle.version }}</div>
+			</a>
+		</div>
+	{% endfor %}
+</div>
+{% endblock %}

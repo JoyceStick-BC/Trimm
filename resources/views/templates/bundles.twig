@@ -1,0 +1,10 @@
+{% extends 'templates/app.twig' %}
+{% block id %}id="bundle"{% endblock %}
+{% block content %}
+	<div id="bundleHeader">
+		{% block bundleheader %} id="bundlehead" {% endblock %}
+	</div>
+	<div id="bundleContainer">
+		{% block bundlecontent %}{% endblock %}
+	</div>
+{% endblock %}

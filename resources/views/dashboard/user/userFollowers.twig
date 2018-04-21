@@ -1,0 +1,19 @@
+{% extends 'templates/userProfile.twig' %}
+
+{% block profilecontent %}
+	<div id="userFollowers">
+		{% if user.getFollowers()|length > 0 %}
+			{% for follower in user.getFollowers() %}
+				<a href="{{ path_for('dashboard.user.profile', {'username': follower.username}) }}">
+					{{follower.name}}
+					{{follower.username}} 
+					<br>
+				</a>
+
+			{% endfor %}
+		{% else %}
+			No one following me. Sad!
+		{% endif %}
+	</div>
+
+{% endblock %}

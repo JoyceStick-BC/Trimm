@@ -1,0 +1,32 @@
+{% extends 'templates/bundles.twig' %}
+
+{% block bundleheader %}
+		<div id="bundlesPic">
+			<img src="{{user.img}}" id="bundleOwnerPic">
+		</div>
+{% endblock %}
+{% block bundlecontent %}
+	<div class = "bundles">
+		<h1 id="bundleName">
+			{{bundles.bundleName}}
+		</h1>
+		<p id="bundleVersion">
+			Version: {{bundles.version}}
+		</p>
+		<div id="bundleOwner">
+			by {{bundles.user}}
+		</div>
+		<div id="bundleDescription">
+			Description: {{bundles.description}}
+		</div>
+		<div id="bundleDownloads">
+			Downloads: {{bundles.downloads}}
+		</div>
+		<div id ="bundleCreatedDate">
+			Created at: {{bundles.created_at}}
+		</div>
+		<div id ="bundleUpdatedDate">
+			Updated at: {{bundles.updated_at}}
+		</div>
+	</div>
+{% endblock %}

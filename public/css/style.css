@@ -157,3 +157,215 @@
         display: inline-block;
     }
 }
+
+
+/* for id's use #, for a class use . */
+#profileContentContainer {
+    width: 65vw;
+    margin:auto;
+    background-color: #eee;
+    max-width: 940px;
+    margin-top: 40px;
+}
+/* profile is the whole background. */
+/* profileContentArea is background for userRepositories but not sidebar area in profile page. Layer above profile. */
+#profile, #profileContentArea{
+    background-color: #f4f4f4;
+}
+#profileSidebar {
+    width: 290px;
+    float:left;
+    border-color: #f1f1f1;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    background-color: #fcfcfc;
+
+}
+#profileImage {
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #d3d3d3;
+    overflow: hidden;
+}
+
+#profileName, #profileBio, #profileUsername {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 26px;
+    margin:0;
+    line-height: 30px;
+    color:#24292e;
+}
+#profileName {
+    margin-top:5px;
+    line-height: 30px;
+    text-align: center;
+}
+#profileUsername {
+    font-size: 20px;
+    color: #666666;
+    text-align: center;
+
+}
+#profileBio {
+    font-size: 14px;
+    line-height: 21px;
+    margin-top:5px;
+    text-align: center;
+
+}
+
+#profileSidebar, #profileContentArea {
+    display:inline-block;
+}
+
+#profileContentArea {
+    width: calc(100% - 310px);
+    float: right;
+}
+#profileSoftware{
+    font-weight: bold;
+    padding: 2px;
+}
+#softwareList{
+    border:1px solid #eaecef;
+    border-radius: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    width: max-content;
+    font-weight: normal;
+}
+#profileSocialMedia{
+    font-weight: bold;
+    padding: 2px;
+
+}
+#socialmedia{
+    font-weight: normal;
+    text-decoration: none;
+    text-decoration-color: black;
+}
+
+
+/*in userprofile id block and in bundle id block*/
+#profile .nav, #bundle .nav {
+    background-color: #24292e;
+    margin-top: 0px;
+    padding: 15px 0;
+    position: relative;
+}
+
+#bundleHeader{
+    width: 65vw;
+    margin:auto;
+    background-color: #eee;
+    max-width: 940px;
+    margin-top: 40px;
+}
+
+#bundleContainer{
+    width: 65vw;
+    margin:auto;
+    background-color: white;
+    max-width: 940px;
+    margin-top: 40px;
+}
+#bundleOwner{
+    font-weight: 700;
+    text-transform: capitalize;
+    font-size: 14px;
+    margin-bottom: 15px;
+    color:#24292e;
+}
+#bundlesPic{
+    width: 10%;
+    float: left;
+    margin: 5px;
+}
+#bundleOwnerPic{
+    border-radius: 50%;
+}
+#bundleVersion{
+    display:inline-block;
+    font-size: 10px;
+}
+
+#bundleName{
+    font-size: 30px;
+    line-height: 24px;
+    margin-top:5px;
+    margin-bottom: 5px;
+    display:inline-block;
+}
+
+.profileSidebarSection {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eaecef;
+    padding-bottom: 15px;
+}
+
+.profileSidebarSection:last-child {
+    border:none;
+}
+
+.bundlehead{
+    display: inline-block;
+    float: left;
+}
+
+.bundle {
+    font-family: 'Open Sans', sans-serif;
+    color: #666666;
+    width: calc(50% - 8px);
+    display: inline-block;
+    float: left;
+    border:1px solid #eaecef;
+    border-radius: 3px;
+    padding:16px;
+    cursor: pointer;
+    transition: 0.2s ease all;
+    background-color:white;
+}
+.bundle:hover {
+    background-color: #eee;
+}
+.bundle a {
+    color:inherit;
+    text-decoration: none;
+}
+.bundle:nth-child(even) {
+    margin-left: 16px;
+}
+.bundleName {
+    font-weight: 700;
+    text-transform: capitalize;
+    font-size: 16px;
+    margin-bottom: 5px;
+    color:#24292e;
+}
+.bundleDesc {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+.bundleVersion {
+    font-size: 12px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
