@@ -5,17 +5,15 @@ namespace Carbon\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Bundle extends Model {
+class StripeDB extends Model {
     //if the table isnt the plural of the class name, use this:
-    protected $table = 'bundles';
+    protected $table = 'stripe';
 
     //define which columns can be written to
     protected $fillable = [
-        'user',
-        'bundleName',
-        'hash',
-        'price',
-        'version',
-        'description',
+        'id',
+        'user_id',
+        'card_id',
+        'acct_id',
     ];
 }

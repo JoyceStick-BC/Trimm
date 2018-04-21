@@ -1,0 +1,91 @@
+{% extends 'templates/dashboard.twig' %}
+{% block content %}
+	<h1>Bank Account Information:</h1>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<p>In order to receive payments, please fill out the form below. </p>
+	{% if has_account %}
+		<p><b>NOTE: </b>You already have a bank account registered with Trimm. If you fill out this form, you will overwrite that account.</p>
+	{% endif %}
+	{% include 'templates/partials/bankForm.twig' %}
+    <p id="personal-info-errors"></p>
+	<h1>Bank Account Information</h1>
+	<select id="country">
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="GB">United Kingdom</option>
+        <option value="DE">Germany</option>
+        <option value="FR">France</option>
+        <option value="ES">Spain</option>
+	<select>
+	<p>Currency</p>
+	<select id="currency">
+        <option value="USD">US Dollar</option>
+        <option value="CAD">Canadian Dollar</option>
+        <option value="GBP">Pound</option>
+        <option value="EUR">Euro</option>
+  	</select>
+ 	<p>Routing Number</p>
+  	<input type="text" id="routing-number" name="test">
+  	<p>Account Number</p>
+  	<input type="text" id="account-number">
+ 	<p>Account Holder Name</p>
+ 	<input type="text" id="account-name">
+ 	<p>Account Holder Type</p>
+ 	<select id="account-holder-type">
+  		<option value="individual">Individual</option>
+    	<option value="company">Company</option>
+  	</select>
+  	<p id="bank-errors"></p>
+  	<p>By registering your account, you agree to <a href="https://stripe.com/us/connect-account/legal">the Stripe Connected Account Agreement.</a></p>
+  	<button id="submit">Submit</button>
+	<script type="text/javascript">
+		Stripe.setPublishableKey( '{{ pub_key }}' );
+
+		var form = document.getElementById('submit');
+		form.addEventListener('click', function(event) {
+			event.preventDefault();
+
+			//display any errors with the personal input section
+			//exit the function if there are any
+			var personal_errors = checkPersonalInput();
+			if (personal_errors.length > 0) {
+				personal_errors = personal_errors.join('');
+				console.log(personal_errors);
+				$('#personal-info-errors').html(
+					'<b>Missing the following fields:</b>' + 
+					personal_errors);
+				return;
+			}
+
+			//create Stripe token and if successful, submit the form
+			Stripe.bankAccount.createToken({
+				country: $('#country').val(),
+				currency: $('#currency').val(),
+				routing_number: $('#routing-number').val(),
+				account_number: $('#account-number').val(),
+  				account_holder_name: $('#account-name').val(),
+  				account_holder_type: $('#account_holder_type').val()
+			}, function(status, response) {
+				if (response.error) {
+					$('#bank-errors').text(response.error.message);
+				} else {
+					$('#bank-token').val(response.id);
+					$('#bank-form').submit();
+				}
+			});
+		});
+
+		function checkPersonalInput() {
+			//return an array of elements with no input
+			var errors = [];
+			var elements = document.forms["bank-form"].getElementsByTagName("input");
+			for(var i = 0; i < elements.length; i++) {
+				if (elements[i].value == "") {
+					errors.push('<p>' + elements[i].alt + '</p>');
+				}
+			}
+			return errors;
+		}
+	</script>
+{% endblock %}

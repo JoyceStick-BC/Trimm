@@ -1,0 +1,16 @@
+{% extends 'templates/dashboard.twig' %}
+{% block content %}
+	{% if disabled_reason %}
+		<p>Reason for payout disabled:</p>
+		{{ disabled_reason }}
+	{% endif %}
+	{% if fields_needed %}
+		<p>Your account needs the following information:</p>
+		{% for field in fields_needed %}
+			{{ field }}		
+		{% endfor %}
+		{% if due_by %}
+			<p>This information must be filled out by: {{ due_by }}</p>
+		{% endif %}
+	{% endif %}
+{% endblock %}
