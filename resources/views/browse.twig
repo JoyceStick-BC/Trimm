@@ -1,0 +1,50 @@
+{% extends 'templates/app.twig' %}
+{% block content %}
+	<h2>Search for a bundle below:</h2>
+	<form action="{{ path_for('bundles.browse') }}" method="post">
+		<input type="text" name="query" id="query" autocomplete="off">
+		{{ csrf.field | raw }}
+		<button>Search</button>
+	</form>
+	<ul id="results">
+
+	</ul>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		var csrfName = $('[name="csrf_name"').val();
+		var csrfValue = $('[name="csrf_value"').val();
+	
+		$('#query').on('input', function() {
+			//make ajax request
+			var val = $('#query').val();
+			if (val == "") {
+				//if the input is empty, clear the results
+				$('#results').html("");
+				return;
+			}
+			//ajax request
+			var results = $.ajax({
+				type: "GET",
+				dataType: 'text',
+				url: '{{ path_for('bundles.getBrowse') }}' + '/' + val,
+				success: function(data) {
+					$('#results').html("");
+					var result = (JSON.parse(data));
+
+					for (var i = 0; i < result.length; i++) {
+						var source = result[i]['_source'];
+						//build list of results
+						$('#results').html(
+							$('#results').html() 
+							+ "<li>" 
+							+ source['user'] + " | "
+							+ source['bundleName'] + " | "
+							+ source['description']
+							+ "</li>"
+						);
+					}
+				}
+			});
+		});
+	</script>
+{% endblock %}
