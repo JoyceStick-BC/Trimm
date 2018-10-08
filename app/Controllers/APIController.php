@@ -144,14 +144,12 @@ class APIController extends Controller {
     }
 
     public function checkAuth($request, $response) {
-        $code = $request->getParam('code');
-        $email = $request->getParam('email');
+        $params = $request->getParam('params');
+        $code = $params['code'];
 
-        $user = User::where('email', $email)->first();
+        $user = User::where('private_key', $code)->first();
 
-        $key = PublicKey::where('privateKey', $code)->where('user_id', $user->id)->first();
-
-        if ($key) {
+        if ($user) {
             $data = [
                 'success' => true,
             ];
