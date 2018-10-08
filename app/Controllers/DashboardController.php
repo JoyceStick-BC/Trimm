@@ -41,7 +41,9 @@ class DashboardController extends Controller {
 
         $identifier = time() . $username . $name;
 
-        $target_file = "/var/www/trimm3d.com/public_html/public/bundles/temp/asset/". $identifier . '.zip';
+        $filesPath = getenv("FILES_PATH");
+
+        $target_file = $filesPath . $identifier . '.zip';
         move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
         $infoJson = [
@@ -51,27 +53,36 @@ class DashboardController extends Controller {
             "name" => $name,
             "bundlename" => $username . "/" .$name
         ];
-        $jsonFile = fopen("/var/www/trimm3d.com/public_html/public/bundles/temp/json/{$identifier}.txt", "w");
+        $jsonFile = fopen($filesPath . "temp/json/{$identifier}.txt", "w");
         fwrite($jsonFile, json_encode($infoJson));
         fclose($jsonFile);
 
         $hash = md5($identifier);
 
         $zip = new \ZipArchive();
-        if ($zip->open("/var/www/trimm3d.com/public_html/public/bundles/{$hash}.zip", \ZipArchive::CREATE) === TRUE)
+
+        var_dump($filesPath . $hash . '.zip');
+        //exit();
+        if ($zip->open($filesPath . $hash . '.zip', \ZipArchive::CREATE) === TRUE)
         {
-            $zip->addFile("/var/www/trimm3d.com/public_html/public/bundles/temp/json/{$identifier}.txt", "info.json");
-            $zip->addFile("/var/www/trimm3d.com/public_html/public/bundles/temp/asset/". $identifier . '.zip', "{$name}.zip");
+            $zip->addFile($filesPath . "temp/json/{$identifier}.txt", "info.json");
+            $zip->addFile($filesPath . "temp/asset/". $identifier . '.zip', "{$name}.zip");
             $zip->close();
+
+            $bundle = Bundle::create([
+                'user' => $username,
+                'bundleName' => $name,
+                'hash' => $hash,
+                'version' => "1",
+                'description' => $request->getParam('description'),
+            ]);
+        } else {
+            return $response->withJson([
+                'message' => 'Could not create zip at file ' . "$filesPath{$hash}.zip",
+            ]);
         }
 
-        $bundle = Bundle::create([
-            'user' => $username,
-            'bundleName' => $name,
-            'hash' => $hash,
-            'version' => "1",
-            'description' => $request->getParam('description'),
-        ]);
+
 
         //add file to elasticsearch server
         $client = new ClientBuilder;
