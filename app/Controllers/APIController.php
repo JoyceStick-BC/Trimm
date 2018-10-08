@@ -69,12 +69,17 @@ class APIController extends Controller {
     }
 
     public function postAuth($request, $response) {
-        $email = $request->getParam('username');
-        $password = $request->getParam('password');
+        $params = $request->getParam('params');
+
+        $email = $params['username'];
+        $password = $params['password'];
 
         $user = User::where('email', $email)->first();
 
+
+
         if (!$user) {
+
             $data = [
                 'success' => false,
                 'message' => 'User with that email does not exist',
@@ -105,8 +110,10 @@ class APIController extends Controller {
     }
 
     public function postAuthCode($request, $response) {
-        $code = $request->getParam('code');
-        $userFirstFour = $request->getParam('userFirstFour');
+        $params = $request->getParam('params');
+
+        $code = $params['code'];
+        $userFirstFour = $params['userFirstFour'];
 
         $user = User::where('exchangeCode', $code)->first();
 
@@ -125,11 +132,8 @@ class APIController extends Controller {
 
         $key = md5($userFirstFour . $code);
 
-        PublicKey::create([
-            'user_id' => $user->id,
-            'expiration' => null,
-            'privateKey' => $key,
-            'type' => 'desktop',
+        $user->update([
+            'private_key' => $key
         ]);
 
         $data = [

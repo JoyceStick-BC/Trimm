@@ -8,6 +8,15 @@ $app->get('/home', function ($request, $response) {
 use Carbon\Middleware\AuthMiddleware;
 use Carbon\Middleware\GuestMiddleware;
 
+$app->add(new Tuupola\Middleware\CorsMiddleware([
+    "origin" => ["*"],
+    "methods" => ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    "headers.allow" => ["*", "Content-Type"],
+    "headers.expose" => [],
+    "credentials" => false,
+    "cache" => 0,
+]));
+
 $app->get('/', 'HomeController:index')->setName('home');
 
 $app->group('', function () {

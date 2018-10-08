@@ -10,6 +10,5 @@ class PublicKey extends Model {
         'user_id',
         'privateKey',
         'type',
-        'expiration',
     ];
 }
