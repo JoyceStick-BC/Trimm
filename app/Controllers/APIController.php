@@ -3,7 +3,6 @@
 namespace Carbon\Controllers;
 use Carbon\Models\User;
 use Carbon\Models\Bundle;
-use Carbon\Models\PublicKey;
 use Elasticsearch\ClientBuilder;
 
 class APIController extends Controller {
